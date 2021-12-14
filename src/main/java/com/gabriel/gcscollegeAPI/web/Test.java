@@ -1,7 +1,11 @@
 package com.gabriel.gcscollegeAPI.web;
 
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,13 +26,10 @@ public class Test {
 	System.out.println(password);
 	}
 	
-	@GetMapping("bookingDetails")
-	public void login(String englishCourse, int accomodation, boolean transfer, String comments) {
-
-	System.out.println(englishCourse);
-	System.out.println(accomodation);
-	System.out.println(transfer);
-	System.out.println(comments);
+	@PostMapping("bookingDetails")
+	public void login(@RequestBody Map<String, Object> bookingDetails ) {
+		
+	System.out.println(bookingDetails);
 	}
 	
 	@GetMapping("submitStudent")
