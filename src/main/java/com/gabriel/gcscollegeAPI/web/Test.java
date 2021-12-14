@@ -23,12 +23,25 @@ public class Test {
 	}
 	
 	@GetMapping("bookingDetails")
-	public void login(String englishCourse, String accomodation, String transfer, String comments) {
+	public void login(String englishCourse, int accomodation, boolean transfer, String comments) {
 
 	System.out.println(englishCourse);
 	System.out.println(accomodation);
 	System.out.println(transfer);
 	System.out.println(comments);
+	}
+	
+	@GetMapping("submitStudent")
+	public void login(String name, String address, String email, String phone,
+			String country, String comments) {
+
+	System.out.println(name);
+	System.out.println(address);
+	System.out.println(email);
+	System.out.println(phone);
+	System.out.println(country);
+	System.out.println(comments);
+	
 	}
 
 }
