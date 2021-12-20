@@ -1,4 +1,4 @@
-package com.gabriel.gcscollegeAPI.web;
+package com.gabriel.gcscollegeAPI.controllers;
 
 import java.util.Map;
 
@@ -12,13 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("api")
-public class Test {
-	
-	@RequestMapping("/")
-	public String getGreeting() {
-		return "helooooo";
-	}
-	
+public class Controllers {
+
 	@GetMapping("userDetails")
 	public void login(String email, String password) {
 
@@ -27,22 +22,21 @@ public class Test {
 	}
 	
 	@PostMapping("bookingDetails")
-	public void login(@RequestBody Map<String, Object> bookingDetails ) {
+	public void booking(@RequestBody Map<String, Object> bookingDetails ) {
 		
 	System.out.println(bookingDetails);
 	}
 	
-	@GetMapping("submitStudent")
-	public void login(String name, String address, String email, String phone,
-			String country, String comments) {
+	@PostMapping("submitStudent")
+	public void registration(@RequestBody Map<String, Object> submitStudent ) {
 
-	System.out.println(name);
-	System.out.println(address);
-	System.out.println(email);
-	System.out.println(phone);
-	System.out.println(country);
-	System.out.println(comments);
-	
+	System.out.println(submitStudent);	
 	}
 
 }
+
+//String dateStr = obj.getString("birthdate");
+//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//Date birthDate = sdf.parse(dateStr);
+////then
+//user.setBirthdate(birthDate);
