@@ -5,6 +5,7 @@ public class Course {
 	private String courseStart;
 	private String courseEnd;
 	private String level;
+	
 	public String getCourseStart() {
 		return courseStart;
 	}

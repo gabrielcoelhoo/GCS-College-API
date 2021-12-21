@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api")
 public class Controllers {
 
-	@GetMapping("userDetails")
-	public void login(String email, String password) {
+	@PostMapping("newUser")
+	public void login(@RequestBody Map<String, Object> newUser) {
 
-	System.out.println(email);
-	System.out.println(password);
+		System.out.println(newUser);
 	}
 	
 	@PostMapping("bookingDetails")

@@ -1,23 +1,44 @@
 package com.gabriel.gcscollegeAPI.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-
-//@Entity
+@Entity
+@Table(name = "student")
 public class Student {
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
+	@Column(nullable = false, length = 45)
 	private String name;
+	
+	@Column(nullable = false, length = 45)
 	private String surname;
+	
+	public Long getId() {
+		return id;
+	}
+	
+	@Column(nullable = false, length = 64)//64 because it will be encrypted
 	private String password;
+	
+	@Column(nullable = false, length = 45)
 	private int phoneNumber;
+	
+	@Column(nullable = false, unique = true, length = 45)//unique because every person has one
 	private String email;
+	
+	@Column(nullable = false, length = 45)
 	private String country;
+	
+	@Column(nullable = false, length = 45)
 	private String studentComments;
+	
 	public String getName() {
 		return name;
 	}
