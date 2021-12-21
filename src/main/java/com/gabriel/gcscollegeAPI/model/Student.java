@@ -28,7 +28,7 @@ public class Student {
 	private String password;
 	
 	@Column(nullable = false, length = 45)
-	private int phoneNumber;
+	private String phoneNumber;
 	
 	@Column(nullable = false, unique = true, length = 45)//unique because every person has one
 	private String email;
@@ -39,8 +39,17 @@ public class Student {
 	@Column(nullable = false, length = 45)
 	private String studentComments;
 	
+	@Column(nullable = false, length = 45)
+	private String address;
+	
 	public String getName() {
 		return name;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -57,11 +66,11 @@ public class Student {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
-	public void setPhoneNumber(int phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhoneNumber(String string) {
+		this.phoneNumber = string;
 	}
 	public String getEmail() {
 		return email;
@@ -81,13 +90,14 @@ public class Student {
 	public void setStudentComments(String studentComments) {
 		this.studentComments = studentComments;
 	}
-	
 	@Override
 	public String toString() {
-		return "Student [name=" + name + ", surname=" + surname + ", password=" + password + ", phoneNumber="
-				+ phoneNumber + ", email=" + email + ", country=" + country + ", studentComments=" + studentComments
-				+ "]";
+		return "Student [id=" + id + ", name=" + name + ", surname=" + surname + ", password=" + password
+				+ ", phoneNumber=" + phoneNumber + ", email=" + email + ", country=" + country + ", studentComments="
+				+ studentComments + ", address=" + address + "]";
 	}
+	
+
 	
 	
 	

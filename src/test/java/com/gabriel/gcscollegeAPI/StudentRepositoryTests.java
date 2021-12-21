@@ -30,7 +30,7 @@ public class StudentRepositoryTests {
 		student.setEmail("brasil@gmail.com");
 		student.setName("gabriel");
 		student.setPassword("gabriel2");
-		student.setPhoneNumber(1234567);
+		student.setPhoneNumber("1234567");
 		student.setStudentComments("this school is awesome");
 		student.setSurname("coelho");
 		
