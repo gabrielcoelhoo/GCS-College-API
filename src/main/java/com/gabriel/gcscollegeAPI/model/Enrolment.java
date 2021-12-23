@@ -1,59 +1,73 @@
 package com.gabriel.gcscollegeAPI.model;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
+@Entity
 public class Enrolment {
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@OneToOne
+	private Course course;
 	
-	private String englishCourse;
-	private String coursePeriod;
-	private int accomodation;
-	private boolean transfer;
-	private String bookingComments;
+	@OneToOne
+	private Student student;
+
+	private String comments;
 	
-	public String getEnglishCourse() {
-		return englishCourse;
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private Status status = Status.SENT;
+
+	public Long getId() {
+		return id;
 	}
-	public void setEnglishCourse(String englishCourse) {
-		this.englishCourse = englishCourse;
+
+	public void setId(Long id) {
+		this.id = id;
 	}
-	public String getCoursePeriod() {
-		return coursePeriod;
+
+	public Course getCourse() {
+		return course;
 	}
-	public void setCoursePeriod(String coursePeriod) {
-		this.coursePeriod = coursePeriod;
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
-	public int getAccomodation() {
-		return accomodation;
+
+	public Student getStudent() {
+		return student;
 	}
-	public void setAccomodation(int accomodation) {
-		this.accomodation = accomodation;
+
+	public void setStudent(Student student) {
+		this.student = student;
 	}
-	public boolean isTransfer() {
-		return transfer;
+
+	public String getComments() {
+		return comments;
 	}
-	public void setTransfer(boolean transfer) {
-		this.transfer = transfer;
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
-	public String getBookingComments() {
-		return bookingComments;
+
+	public Status getStatus() {
+		return status;
 	}
-	public void setBookingComments(String bookingComments) {
-		this.bookingComments = bookingComments;
-	}
-	@Override
-	public String toString() {
-		return "Enrolment [englishCourse=" + englishCourse + ", coursePeriod=" + coursePeriod + ", accomodation="
-				+ accomodation + ", transfer=" + transfer + ", bookingComments=" + bookingComments + "]";
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 	
 	
-	
+
 }
-	
 
-
-
-
-//see if this Date type is correct
