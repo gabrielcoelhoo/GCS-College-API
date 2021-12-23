@@ -1,6 +1,7 @@
 package com.gabriel.gcscollegeAPI.model;
 
 import javax.persistence.Entity;
+//trial on rafael pull
 
 @Entity
 public class Course {
