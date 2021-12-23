@@ -42,6 +42,11 @@ public class Student {
 	@Column(nullable = false, length = 45)
 	private String address;
 	
+	
+	
+	public Student() {
+
+	}
 	public String getName() {
 		return name;
 	}
