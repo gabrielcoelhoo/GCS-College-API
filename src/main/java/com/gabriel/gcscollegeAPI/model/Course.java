@@ -1,5 +1,8 @@
 package com.gabriel.gcscollegeAPI.model;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Course {
 	
 	private String courseStart;
