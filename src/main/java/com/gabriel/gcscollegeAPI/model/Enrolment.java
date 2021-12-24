@@ -23,6 +23,15 @@ public class Enrolment {
 
 	private String comments;
 	
+	public enum Status {
+
+		SENT,
+		ANALYSIS,
+		COMPLETED,
+		COLLECTED,
+		REFUSED;
+	}
+	
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Status status = Status.SENT;

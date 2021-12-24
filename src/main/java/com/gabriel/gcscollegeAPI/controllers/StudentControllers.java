@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.services.StudentService;
 
@@ -22,11 +23,20 @@ public class StudentControllers {
 	private StudentService studentService;
 
 	@PostMapping("submitStudent")
-	public String login(@RequestBody Student student) {
+	public String submission(@RequestBody Student student) {
 		
 		studentService.saveStudent(student);
 		
 		return "new student is added";
+		
+	}
+	
+	@PostMapping("userLogin")
+	public String login(@RequestBody Login login) {
+		
+		
+		return studentService.login(login);
+		
 		
 	}
 	

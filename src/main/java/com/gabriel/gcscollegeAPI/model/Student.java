@@ -44,6 +44,10 @@ public class Student {
 	@Column(nullable = false, length = 45)
 	@NotEmpty
 	private String studentComments;
+	
+	@Column(nullable = false, length = 45)
+	@NotEmpty
+	private String username;
 
 	@Column(nullable = false, length = 45)
 	@NotEmpty(message = "addres cannot be null")
@@ -67,6 +71,15 @@ public class Student {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void setName(String name) {
@@ -125,7 +138,7 @@ public class Student {
 	public String toString() {
 		return "Student [id=" + id + ", name=" + name + ", surname=" + surname + ", password=" + password
 				+ ", phoneNumber=" + phoneNumber + ", email=" + email + ", country=" + country + ", studentComments="
-				+ studentComments + ", address=" + address + "]";
+				+ studentComments + ", username=" + username + ", address=" + address + "]";
 	}
 
 	@Override
