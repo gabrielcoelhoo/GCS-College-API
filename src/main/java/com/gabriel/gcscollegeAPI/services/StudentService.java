@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
+import com.gabriel.gcscollegeAPI.model.Token;
 
 public interface StudentService {
 	
@@ -11,6 +12,6 @@ public interface StudentService {
 	
 	public List<Student> getAllStudents();
 	
-	public String login(Login login);
+	public Token login(Login login);
 
 }

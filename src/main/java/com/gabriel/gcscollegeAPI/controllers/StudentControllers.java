@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
+import com.gabriel.gcscollegeAPI.model.Token;
 import com.gabriel.gcscollegeAPI.services.StudentService;
 
 @RestController
@@ -32,7 +33,7 @@ public class StudentControllers {
 	}
 	
 	@PostMapping("userLogin")
-	public String login(@RequestBody Login login) {
+	public Token login(@RequestBody Login login) {
 		
 		
 		return studentService.login(login);
