@@ -23,6 +23,10 @@ public class Enrolment {
 
 	private String comments;
 	
+	private String transfer;
+	
+	private int accomodation;
+	
 	public enum Status {
 
 		SENT,
@@ -35,6 +39,22 @@ public class Enrolment {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Status status = Status.SENT;
+	
+	public String getTransfer() {
+		return transfer;
+	}
+
+	public void setTransfer(String transfer) {
+		this.transfer = transfer;
+	}
+
+	public int getAccomodation() {
+		return accomodation;
+	}
+
+	public void setAccomodation(int accomodation) {
+		this.accomodation = accomodation;
+	}
 
 	public Long getId() {
 		return id;
