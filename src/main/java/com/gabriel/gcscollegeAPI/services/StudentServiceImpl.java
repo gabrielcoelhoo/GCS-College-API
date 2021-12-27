@@ -37,13 +37,17 @@ public class StudentServiceImpl {
 
 	@Transactional
 	public Student saveStudent(Student student) {
-		verifyEmail(student.getEmail());
+		Optional<Student> found = studentRepository.findByEmail(student.getEmail());
+		
+		if (found.isPresent() && !found.get().equals(student)) {
+			throw new InvalidEmailException(String.format("The email %s is already registered", student.getEmail()));
+		}
 		return studentRepository.save(student);
 	}
 
 	@Transactional
 	public Student updateStudent(Student student) {
-		return studentRepository.save(student);
+		return saveStudent(student);
 	}
 
 	public Token login(Login login) {
@@ -62,13 +66,6 @@ public class StudentServiceImpl {
 //	public Course saveCourse(Course course) {
 //		//return studentRepository.saveCourse(course);
 //	}
-
-	public void verifyEmail(String email) {
-		Optional<Student> found = studentRepository.findByEmail(email);
-		if (found.isPresent()) {
-			throw new InvalidEmailException(String.format("The email %s is already registered", email));
-		}
-	}
 
 	// creation of token
 

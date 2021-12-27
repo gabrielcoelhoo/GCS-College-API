@@ -50,10 +50,8 @@ public class StudentControllers {
 	
 	@PutMapping("/{studentID}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public String submission(@RequestBody @Valid StudentInputDTO student, @PathVariable  Long studentID) {
+	public String update(@RequestBody @Valid StudentInputDTO student, @PathVariable  Long studentID) {
 		Student studentBD = studentService.findByIDOrThrowsException(studentID);
-		
-		studentService.verifyEmail(student.getEmail());
 		
 		mapper.map(student, studentBD);
 		
