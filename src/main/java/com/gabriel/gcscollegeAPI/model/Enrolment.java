@@ -20,6 +20,9 @@ public class Enrolment {
 	
 	@OneToOne
 	private Student student;
+	
+	@OneToOne
+	private Employee employee;
 
 	private String comments;
 	

@@ -31,15 +31,6 @@ public class Course {
 	@Column(nullable = false, length = 40)
 	@NotNull
 	private String level;
-	
-	@Column(nullable = false)
-	@NotNull
-	private int acommodation;
-	
-	@Column(nullable = false)
-	@NotNull
-	private boolean hasTranfer;
-	
 
 	public Long getId() {
 		return id;
@@ -72,22 +63,13 @@ public class Course {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
-	public int getAcommodation() {
-		return acommodation;
-	}
-	public void setAcommodation(int acommodation) {
-		this.acommodation = acommodation;
-	}
-	public boolean isHasTranfer() {
-		return hasTranfer;
-	}
-	public void setHasTranfer(boolean hasTranfer) {
-		this.hasTranfer = hasTranfer;
-	}
 	@Override
 	public String toString() {
-		return "Course [courseStart=" + courseStart + ", courseEnd=" + courseEnd + ", level=" + level + "]";
+		return "Course [id=" + id + ", courseStart=" + courseStart + ", courseEnd=" + courseEnd + ", period=" + period
+				+ ", level=" + level + "]";
 	}
+	
+
 	
 	
 

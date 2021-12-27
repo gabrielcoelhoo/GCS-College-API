@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.Course;
+import com.gabriel.gcscollegeAPI.model.Enrolment;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -35,24 +37,21 @@ public class StudentControllers {
 	@PostMapping("userLogin")
 	public Token login(@RequestBody Login login) {
 		
-		
 		return studentService.login(login);
-		
-		
+			
 	}
 	
-	@GetMapping("getAll")
-	public List<Student> getAllStudents(){
-		
-		return studentService.getAllStudents();
-		
-	}
+	
+//	@PostMapping("submitCourse")
+//	public String booking(@RequestBody Course course) {
+//		
+//		 studentService.saveCourse(course);
+//		 
+//		 return "course has beed added";
+//		
+//		
+//	}
 	
 
 }
 
-//String dateStr = obj.getString("birthdate");
-//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//Date birthDate = sdf.parse(dateStr);
-////then
-//user.setBirthdate(birthDate);

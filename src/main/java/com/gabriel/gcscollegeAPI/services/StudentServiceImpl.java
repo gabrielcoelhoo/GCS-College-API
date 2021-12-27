@@ -9,6 +9,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gabriel.gcscollegeAPI.model.Course;
+import com.gabriel.gcscollegeAPI.model.Enrolment;
 import com.gabriel.gcscollegeAPI.model.Login;
 
 import io.jsonwebtoken.Claims;
@@ -58,14 +60,7 @@ private String SECRET_KEY = "secret";
 		return studentRepository.save(student);
 	
 	}
-
-
-	@Override
-	public List<Student> getAllStudents() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 
 	@Override
 	public Token login(Login login) {
@@ -80,15 +75,13 @@ private String SECRET_KEY = "secret";
 		return createJWT("cbwa", student.getUsername(), "gabriel");
 	}
 
+//	@Override
+//	public Course saveCourse(Course course) {
+//		//return studentRepository.saveCourse(course);
+//	}
 
-		
-//		studentRepository.finfindbyemailandid(
-//				return createJWT("cbwa", user.getUsername(), "david");
-//		}else
-//			throw new RuntimeException("User not found");
-			
+
 	
-	
-	
+
 
 }
