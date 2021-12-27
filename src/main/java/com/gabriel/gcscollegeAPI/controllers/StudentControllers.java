@@ -25,6 +25,7 @@ import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/students")
 public class StudentControllers {
+	//comment to tests
 	
 	@Autowired
 	private StudentServiceImpl studentService;
