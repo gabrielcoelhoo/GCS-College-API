@@ -7,9 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "course")
 public class Course {
 	
 	@Id
@@ -31,7 +33,11 @@ public class Course {
 	@Column(nullable = false, length = 40)
 	@NotNull
 	private String level;
+	
+	
 
+	public Course() {}
+	
 	public Long getId() {
 		return id;
 	}

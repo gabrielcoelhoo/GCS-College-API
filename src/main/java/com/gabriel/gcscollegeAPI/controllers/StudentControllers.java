@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gabriel.gcscollegeAPI.dto.StudentInputDTO;
+import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -25,6 +26,7 @@ import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/students")
 public class StudentControllers {
+	
 	
 	@Autowired
 	private StudentServiceImpl studentService;
@@ -38,11 +40,11 @@ public class StudentControllers {
 		return studentService.findByIDOrThrowsException(studentID);
 	}
 
-	@PostMapping
+	@PostMapping("submitStudent")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String submission(@RequestBody @Valid StudentInputDTO student) {
 		
-		studentService.saveStudent(toDomain(student));
+	studentService.saveStudent(toDomain(student));
 		
 		return "new student is added";
 		
@@ -53,7 +55,7 @@ public class StudentControllers {
 	public String submission(@RequestBody @Valid StudentInputDTO student, @PathVariable  Long studentID) {
 		Student studentBD = studentService.findByIDOrThrowsException(studentID);
 		
-		studentService.verifyEmail(student.getEmail());
+	//	studentService.verifyEmail(student.getEmail());
 		
 		mapper.map(student, studentBD);
 		
@@ -72,13 +74,10 @@ public class StudentControllers {
 	
 	
 //	@PostMapping("submitCourse")
-//	public String booking(@RequestBody Course course) {
+//	public Course booking(@RequestBody Course course) {
 //		
-//		 studentService.saveCourse(course);
-//		 
-//		 return "course has beed added";
-//		
-//		
+//		 return studentService.saveCourse(course);
+//			
 //	}
 	
 	private Student toDomain(StudentInputDTO input) {

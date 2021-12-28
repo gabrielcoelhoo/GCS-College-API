@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gabriel.gcscollegeAPI.exception.InvalidEmailException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
+import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -37,9 +38,16 @@ public class StudentServiceImpl {
 
 	@Transactional
 	public Student saveStudent(Student student) {
-		verifyEmail(student.getEmail());
+		//verifyEmail(student.getEmail());
 		return studentRepository.save(student);
 	}
+	
+//	public void verifyEmail(String email) {
+//		Optional<Student> found = Optional.of(studentRepository.findByEmail(email));
+//		if (found.isPresent()) {
+//			throw new InvalidEmailException(String.format("The email %s is already registered", email));
+//		}
+//	}
 
 	@Transactional
 	public Student updateStudent(Student student) {
@@ -48,7 +56,7 @@ public class StudentServiceImpl {
 
 	public Token login(Login login) {
 
-		Student student = studentRepository.findByEmail(login.getUsername()).get();
+		Student student = studentRepository.findByEmail(login.getEmail());
 		if (student == null) {
 			throw new RuntimeException("User does not exist.");
 		}
@@ -58,17 +66,6 @@ public class StudentServiceImpl {
 		return createJWT("cbwa", student.getEmail(), "gabriel");
 	}
 
-//	@Override
-//	public Course saveCourse(Course course) {
-//		//return studentRepository.saveCourse(course);
-//	}
-
-	public void verifyEmail(String email) {
-		Optional<Student> found = studentRepository.findByEmail(email);
-		if (found.isPresent()) {
-			throw new InvalidEmailException(String.format("The email %s is already registered", email));
-		}
-	}
 
 	// creation of token
 
@@ -90,6 +87,13 @@ public class StudentServiceImpl {
 		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody();
 		return claims;
 	}
+
+//	public Student saveCourse(Course course) {
+//		// TODO Auto-generated method stub
+//		return studentRepository.saveCourse(course);
+//	}
+
+
 
 	// check user name and password and return a JWT
 
