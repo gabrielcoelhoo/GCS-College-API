@@ -1,5 +1,7 @@
 package com.gabriel.gcscollegeAPI.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,11 @@ public class CourseServiceImpl {
 		return courseRepository.save(course);
 		
 		
+	}
+
+	public List<Course> getCourses() {
+
+		return courseRepository.findAll();
 	}
 
 }

@@ -1,7 +1,10 @@
 package com.gabriel.gcscollegeAPI.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +24,18 @@ public class CourseControllers {
 	@PostMapping("submitCourse")
 	public Course booking(@RequestBody Course course) {
 		
+		int quantity = courseService.getCourses().size() + 1;
+		
+		System.out.println(quantity);
+		
 		return courseService.saveCourse(course);
 			
 	}
+	
+	@GetMapping("/courses")
+    public List<Course> findAllCourses() {
+		
+        return courseService.getCourses();
+    }
 
 }
