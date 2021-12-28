@@ -1,6 +1,5 @@
 package com.gabriel.gcscollegeAPI.services;
 
-import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -11,6 +10,5 @@ public interface StudentService {
 	
 	public Token login(Login login);
 	
-	public Course saveCourse(Course course);
-
+	
 }

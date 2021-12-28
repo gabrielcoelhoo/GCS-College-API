@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gabriel.gcscollegeAPI.exception.InvalidEmailException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
-import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -32,13 +31,9 @@ public class StudentServiceImpl {
 
 	private String SECRET_KEY = "secret";
 	
-	@Transactional
-	public Course saveCourse(Course course) {
-
-		return studentRepository.save(course);
-		
-		
-	}
+	
+	
+	
 
 	public Student findByIDOrThrowsException(Long id) {
 		return studentRepository.findById(id).orElseThrow(
@@ -102,8 +97,5 @@ public class StudentServiceImpl {
 		return claims;
 	}
 
-	
-
-	// check user name and password and return a JWT
 
 }

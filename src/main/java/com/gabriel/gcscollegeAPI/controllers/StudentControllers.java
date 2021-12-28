@@ -20,6 +20,7 @@ import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
+import com.gabriel.gcscollegeAPI.services.CourseServiceImpl;
 import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
 
 @RestController
@@ -29,6 +30,9 @@ public class StudentControllers {
 		
 	@Autowired
 	private StudentServiceImpl studentService;
+	
+	@Autowired
+	private CourseServiceImpl courseService;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -73,7 +77,7 @@ public class StudentControllers {
 	@PostMapping("submitCourse")
 	public Course booking(@RequestBody Course course) {
 		
-		return studentService.saveCourse(course);
+		return courseService.saveCourse(course);
 			
 	}
 	
