@@ -36,7 +36,9 @@ public class Course {
 	
 	
 
-	public Course() {}
+	public Course() {
+		
+	}
 	
 	public Long getId() {
 		return id;

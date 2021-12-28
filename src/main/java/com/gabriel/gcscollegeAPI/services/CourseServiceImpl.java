@@ -18,23 +18,34 @@ public class CourseServiceImpl {
 	
 	@Transactional
 	public Course saveCourse(Course course) {
-		
-//		int coursesQuantity = 0;
-//		
-//		coursesQuantity = studentRepository.findAllCourses().size();
-//		
-//		
-//		System.out.println(coursesQuantity);
-		
 
 		return courseRepository.save(course);
-		
-		
+			
 	}
 
 	public List<Course> getCourses() {
 
 		return courseRepository.findAll();
 	}
+	
+	
+    public String deleteProduct(long id) {
+    	courseRepository.deleteById(id);
+        return "product removed !! " + id;
+    }
+    
+
+	public Course getProductById(int id) {
+		return courseRepository.findById((long) id).orElse(null);
+	}
+
+
+	public Course updateProduct(Course course) {
+		
+		Course existingCourse = courseRepository.findById(course.getId()).orElse(null);
+
+        return courseRepository.save(existingCourse);
+	}
+
 
 }

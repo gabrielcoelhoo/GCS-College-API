@@ -8,6 +8,6 @@ import com.gabriel.gcscollegeAPI.model.Course;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long>{
-		
+
 	
 }

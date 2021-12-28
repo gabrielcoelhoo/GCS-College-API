@@ -29,10 +29,7 @@ public class StudentServiceImpl {
 	@Autowired
 	private StudentRepository studentRepository;
 
-	private String SECRET_KEY = "secret";
-	
-	
-	
+	private String SECRET_KEY = "secret";	
 	
 
 	public Student findByIDOrThrowsException(Long id) {
@@ -96,6 +93,8 @@ public class StudentServiceImpl {
 		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody();
 		return claims;
 	}
+
+	
 
 
 }
