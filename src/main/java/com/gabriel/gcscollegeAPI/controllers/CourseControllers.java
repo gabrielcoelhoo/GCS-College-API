@@ -47,25 +47,25 @@ public class CourseControllers {
 			
 	}
 	
-	@GetMapping("/courses")
+	@GetMapping("/all")
     public List<Course> findAllCourses() {
 		
         return courseService.getCourses();
     }
 	
-	@GetMapping("/productById/{id}")
-    public Course findProductById(@PathVariable int id) {
-        return courseService.getProductById(id);
+	@GetMapping("/courseById/{id}")
+    public Course findCourseById(@PathVariable int id) {
+        return courseService.getCourseById(id);
     }
 
     @PutMapping("/update")
-    public Course updateProduct(@RequestBody Course product) {
-        return courseService.updateProduct(product);
+    public Course updateProduct(@RequestBody Course course) {
+        return courseService.updateCourse(course);
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteProduct(@PathVariable int id) {
-        return courseService.deleteProduct(id);
+        return courseService.deleteCourse(id);
     }
 
 }

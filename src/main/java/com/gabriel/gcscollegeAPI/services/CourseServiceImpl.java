@@ -29,23 +29,24 @@ public class CourseServiceImpl {
 	}
 	
 	
-    public String deleteProduct(long id) {
+    public String deleteCourse(long id) {
     	courseRepository.deleteById(id);
         return "product removed !! " + id;
     }
     
 
-	public Course getProductById(int id) {
+	public Course getCourseById(int id) {
 		return courseRepository.findById((long) id).orElse(null);
 	}
 
 
-	public Course updateProduct(Course course) {
+	public Course updateCourse(Course course) {
 		
 		Course existingCourse = courseRepository.findById(course.getId()).orElse(null);
 
         return courseRepository.save(existingCourse);
 	}
+
 
 
 }
