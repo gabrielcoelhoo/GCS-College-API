@@ -38,7 +38,15 @@ public class StudentServiceImpl {
 
 	@Transactional
 	public Student saveStudent(Student student) {
+<<<<<<< HEAD
 		//verifyEmail(student.getEmail());
+=======
+		Optional<Student> found = studentRepository.findByEmail(student.getEmail());
+		
+		if (found.isPresent() && !found.get().equals(student)) {
+			throw new InvalidEmailException(String.format("The email %s is already registered", student.getEmail()));
+		}
+>>>>>>> 459a307c5f19884e457ea9026e28db7434b6f224
 		return studentRepository.save(student);
 	}
 	
@@ -51,7 +59,7 @@ public class StudentServiceImpl {
 
 	@Transactional
 	public Student updateStudent(Student student) {
-		return studentRepository.save(student);
+		return saveStudent(student);
 	}
 
 	public Token login(Login login) {
@@ -66,6 +74,13 @@ public class StudentServiceImpl {
 		return createJWT("cbwa", student.getEmail(), "gabriel");
 	}
 
+<<<<<<< HEAD
+=======
+//	@Override
+//	public Course saveCourse(Course course) {
+//		//return studentRepository.saveCourse(course);
+//	}
+>>>>>>> 459a307c5f19884e457ea9026e28db7434b6f224
 
 	// creation of token
 
