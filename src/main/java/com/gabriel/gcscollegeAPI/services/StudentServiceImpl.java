@@ -23,6 +23,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+
 @Service
 public class StudentServiceImpl {
 
@@ -30,6 +31,14 @@ public class StudentServiceImpl {
 	private StudentRepository studentRepository;
 
 	private String SECRET_KEY = "secret";
+	
+	@Transactional
+	public Course saveCourse(Course course) {
+
+		return studentRepository.save(course);
+		
+		
+	}
 
 	public Student findByIDOrThrowsException(Long id) {
 		return studentRepository.findById(id).orElseThrow(
@@ -93,12 +102,7 @@ public class StudentServiceImpl {
 		return claims;
 	}
 
-//	public Student saveCourse(Course course) {
-//		// TODO Auto-generated method stub
-//		return studentRepository.saveCourse(course);
-//	}
-
-
+	
 
 	// check user name and password and return a JWT
 

@@ -26,9 +26,7 @@ import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/students")
 public class StudentControllers {
-	//comment to tests
-	
-	
+		
 	@Autowired
 	private StudentServiceImpl studentService;
 	
@@ -55,12 +53,7 @@ public class StudentControllers {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public String update(@RequestBody @Valid StudentInputDTO student, @PathVariable  Long studentID) {
 		Student studentBD = studentService.findByIDOrThrowsException(studentID);
-		
-<<<<<<< HEAD
-	//	studentService.verifyEmail(student.getEmail());
-		
-=======
->>>>>>> 459a307c5f19884e457ea9026e28db7434b6f224
+
 		mapper.map(student, studentBD);
 		
 		studentService.updateStudent(studentBD);
@@ -77,15 +70,17 @@ public class StudentControllers {
 	}
 	
 	
-//	@PostMapping("submitCourse")
-//	public Course booking(@RequestBody Course course) {
-//		
-//		 return studentService.saveCourse(course);
-//			
-//	}
+	@PostMapping("submitCourse")
+	public Course booking(@RequestBody Course course) {
+		
+		return studentService.saveCourse(course);
+			
+	}
 	
 	private Student toDomain(StudentInputDTO input) {
+		
 		return mapper.map(input, Student.class);
+		
 	}
 	
 
