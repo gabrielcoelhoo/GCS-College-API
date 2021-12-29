@@ -24,12 +24,23 @@ public class CourseControllers {
 	@Autowired
 	private CourseServiceImpl courseService;
 	
+	//working on this
+	// -get a course and check if there is any available spot
+	// 10 slots per sales person
+	// 4 persons in total
+	
+	//in the future let this amount of slots and sales dynamically 
+	// regarding adm orders
+	
+	//where will I create the method to this verification before submitcourse ? 
+	
 	@PostMapping("submitCourse")
 	public Course booking(@RequestBody Course course) {
 		
 		int quantity = courseService.getCourses().size() + 1;
 		
 		if(quantity <= 10) {
+			
 			
 		}else if(quantity >= 11 & quantity <= 20) {
 			

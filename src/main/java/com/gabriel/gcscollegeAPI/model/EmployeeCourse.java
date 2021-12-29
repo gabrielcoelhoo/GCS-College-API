@@ -18,9 +18,6 @@ import javax.persistence.TemporalType;
 @Table(name = "EMPLOYEE_COURSES")
 public class EmployeeCourse {
 	
-	
-	
-	 // additional fields
     private boolean activated;
     private Date registeredDate;
     
@@ -56,8 +53,6 @@ public class EmployeeCourse {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "COURSE_ID")
 	private Course course;
-
-    
     
 	public Course getCourse() {
 		return course;

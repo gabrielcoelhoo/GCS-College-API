@@ -10,7 +10,6 @@ public class Token {
 
 	public Token() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getToken() {
