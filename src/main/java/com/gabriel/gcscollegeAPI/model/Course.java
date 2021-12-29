@@ -1,21 +1,19 @@
 package com.gabriel.gcscollegeAPI.model;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.validation.constraints.NotNull;
+
+//following this tutorial
+//https://www.baeldung.com/jpa-many-to-many
 
 @Entity
 @Table(name = "course")
@@ -42,20 +40,21 @@ public class Course {
 	@NotNull
 	private String level;
 	
-	private Set<EmployeeCourse> employeeCourses = new HashSet<EmployeeCourse>();
+//	private Set<EmployeeCourse> employeeCourses = new HashSet<EmployeeCourse>();
 	
 	@OneToMany(mappedBy = "course")
-    public Set<EmployeeCourse> getEmployeeCourses() {
-        return employeeCourses;
-    }
+    public Set<EmployeeCourse> EmployeeCourse;
+	//getEmployeeCourses() {
+//        return employeeCourses;
+//    }
 	
-    public void setEmployeeCourses(Set<EmployeeCourse> employeeCourses) {
-		this.employeeCourses = employeeCourses;
-	}
-     
-    public void addEmployeeCourse(EmployeeCourse employeeCourse) {
-        this.employeeCourses.add(employeeCourse);
-    }
+//    public void setEmployeeCourses(Set<EmployeeCourse> courses) {
+//		this.employeeCourses = courses;
+//	}
+//     
+//    public void addEmployeeCourse(EmployeeCourse employeeCourse) {
+//        this.employeeCourses.add(employeeCourse);
+//    }
 	
 	public Course() {
 		

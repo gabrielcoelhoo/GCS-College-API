@@ -1,6 +1,5 @@
 package com.gabriel.gcscollegeAPI.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -19,7 +18,7 @@ public class Employee {
 	@Column(name = "employee_id")
 	private Long id;
 	
-	private Set<EmployeeCourse> employeeCourses = new HashSet<EmployeeCourse>();
+//	private Set<EmployeeCourse> employeeCourses = new HashSet<EmployeeCourse>();
 
 	
 	private String name;
@@ -37,17 +36,18 @@ public class Employee {
 	}
 	
 	@OneToMany(mappedBy = "employee")
-    public Set<EmployeeCourse> getEmployeeCourse() {
-        return employeeCourses;
-    }
-
-	public void addEmployeeCourse(EmployeeCourse employeeCourse) {
-        this.employeeCourses.add(employeeCourse);
-    } 
-
-	public void setEmployeeCourses(Set<EmployeeCourse> employeeCourses) {
-		this.employeeCourses = employeeCourses;
-	}
+	public Set<EmployeeCourse> EmployeeCourse;
+//	getEmployeeCourse() {
+//        return employeeCourses;
+//    }
+//
+//	public void addEmployeeCourse(EmployeeCourse employeeCourse) {
+//        this.employeeCourses.add(employeeCourse);
+//    } 
+//
+//	 public void setEmployeeCourses(Set<EmployeeCourse> courses) {
+//			this.employeeCourses = courses;
+//		}
 
 	@Override
 	public String toString() {

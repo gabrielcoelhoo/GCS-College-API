@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,17 +17,19 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "EMPLOYEE_COURSES")
 public class EmployeeCourse {
-	private long id;
-	private Employee employee;
-	private Course course;
+	
+	
 	
 	 // additional fields
     private boolean activated;
     private Date registeredDate;
     
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EMPLOYEE_COURSE_ID")
+    private long id;
+    
+    
     public long getId() {
         return id;
     }
@@ -35,8 +38,12 @@ public class EmployeeCourse {
         this.id = id;
     }
  
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "EMPLOYEE_ID") 
+    private Employee employee;
+    
+    
+    
     public Employee getEmployee() {
 		return employee;
 	}
@@ -48,6 +55,10 @@ public class EmployeeCourse {
  
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "COURSE_ID")
+	private Course course;
+
+    
+    
 	public Course getCourse() {
 		return course;
 	}
