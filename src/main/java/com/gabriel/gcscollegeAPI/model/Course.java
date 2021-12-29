@@ -9,19 +9,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 //following this tutorial
 //https://www.baeldung.com/jpa-many-to-many
 
 @Entity
-@Table(name = "course")
 public class Course {
+	
+	//what is serializable 
+	//public class Country implements Serializable {
+    //private static final long serialVersionUID = 1L;
+	//search later !1
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "course_id")
 	private Long id;
 	
 	@Column(nullable = false)
@@ -40,25 +42,32 @@ public class Course {
 	@NotNull
 	private String level;
 	
-//	private Set<EmployeeCourse> employeeCourses = new HashSet<EmployeeCourse>();
-	
 	@OneToMany(mappedBy = "course")
-    public Set<EmployeeCourse> EmployeeCourse;
-	//getEmployeeCourses() {
-//        return employeeCourses;
-//    }
+	Set<EmployeeCourse> employeeCourses;
+
+
+//    @ManyToMany(fetch = FetchType.LAZY,cascade = { CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable(name = "course_employee",joinColumns = { @JoinColumn(name = "course_id") },inverseJoinColumns = { @JoinColumn(name = "employee_id") })
+//    private Set<Employee> employees = new HashSet<Employee>();
+    
 	
-//    public void setEmployeeCourses(Set<EmployeeCourse> courses) {
-//		this.employeeCourses = courses;
-//	}
-//     
-//    public void addEmployeeCourse(EmployeeCourse employeeCourse) {
-//        this.employeeCourses.add(employeeCourse);
-//    }
-	
+//	@ManyToOne
+//	@JoinTable(
+//			name="COURSE_EMPLOYEE"
+//			,joinColumns = {
+//					@JoinColumn(name="course_id")
+//			}
+//			,inverseJoinColumns = {
+//					@JoinColumn(name="employee_id")
+//			}
+//			
+//			)
+//	private List<EmployeeCourses> employeeCourses;
+//	
 	public Course() {
 		
 	}
+	
 	
 	public Long getId() {
 		return id;
@@ -91,6 +100,7 @@ public class Course {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
+	
 	@Override
 	public String toString() {
 		return "Course [id=" + id + ", courseStart=" + courseStart + ", courseEnd=" + courseEnd + ", period=" + period

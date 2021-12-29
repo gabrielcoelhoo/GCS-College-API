@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gabriel.gcscollegeAPI.model.Course;
+import com.gabriel.gcscollegeAPI.model.EmployeeCourse;
 import com.gabriel.gcscollegeAPI.repositories.CourseRepository;
 
 
@@ -22,29 +23,33 @@ public class CourseServiceImpl {
 		return courseRepository.save(course);
 			
 	}
-
+	
+	
 	public List<Course> getCourses() {
 
 		return courseRepository.findAll();
 	}
-	
 	
     public String deleteCourse(long id) {
     	courseRepository.deleteById(id);
         return "product removed !! " + id;
     }
     
-
 	public Course getCourseById(int id) {
 		return courseRepository.findById((long) id).orElse(null);
 	}
-
 
 	public Course updateCourse(Course course) {
 		
 		Course existingCourse = courseRepository.findById(course.getId()).orElse(null);
 
         return courseRepository.save(existingCourse);
+	}
+
+
+	public Course getCourseById(Long id) {
+		return courseRepository.findById((long) id).orElse(null);
+		
 	}
 
 

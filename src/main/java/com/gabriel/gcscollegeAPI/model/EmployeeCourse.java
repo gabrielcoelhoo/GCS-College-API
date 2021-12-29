@@ -36,7 +36,7 @@ public class EmployeeCourse {
     }
  
     @ManyToOne
-    @JoinColumn(name = "EMPLOYEE_ID") 
+    @JoinColumn(name = "employee_id") 
     private Employee employee;
     
     
@@ -51,7 +51,7 @@ public class EmployeeCourse {
 
  
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "COURSE_ID")
+    @JoinColumn(name = "course_id")
 	private Course course;
     
 	public Course getCourse() {

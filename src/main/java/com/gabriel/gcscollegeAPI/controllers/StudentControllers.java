@@ -40,12 +40,26 @@ public class StudentControllers {
 	}
 
 	@PostMapping("submitStudent")
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public String submission(@RequestBody @Valid StudentInputDTO student) {
+	public Student submission(@RequestBody Student student) {
 		
-	studentService.saveStudent(toDomain(student));
+//	    String encodedPassword;
+//	    
+//	    //encode the password
+//	    encodedPassword = encoder.encode(student.getPassword());
+//	    
+//	    Set<Role> securityRoles = new HashSet<Role>();
+//
+//	    //get Role
+//	    securityRoles.add(roleDao.findById(userForm.getRoleId()));
+//
+//	    user.setRoles(securityRoles);
+//
+//	    user.setTenantId(securityAccessor.getCurrentLoggedUser().getTenantId());
+
 		
-		return "new student is added";
+	studentService.saveStudent(student);
+		
+		return student;
 		
 	}
 	

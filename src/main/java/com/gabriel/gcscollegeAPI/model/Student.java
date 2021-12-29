@@ -1,5 +1,11 @@
 package com.gabriel.gcscollegeAPI.model;
 
+import java.security.Permission;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.management.relation.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,6 +54,18 @@ public class Student {
 	@Column(nullable = false, length = 45)
 	@NotEmpty(message = "addres cannot be null")
 	private String address;
+	
+//	@Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>();
+//        for (Role role : roles) {
+//            for (Permission permission : role.getPermissions()) {
+//                GrantedAuthorityImpl authority = new GrantedAuthorityImpl(PERMISSION_PREFIX + permission.getPermission());
+//                authorities.add(authority);
+//            }
+//        }
+//        return authorities;
+   // }
 
 	public Student() {
 
