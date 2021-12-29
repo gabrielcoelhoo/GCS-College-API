@@ -2,7 +2,6 @@ package com.gabriel.gcscollegeAPI.controllers;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gabriel.gcscollegeAPI.dto.StudentInputDTO;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -25,15 +23,10 @@ import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/students")
 public class StudentControllers {
-		
+
 	@Autowired
 	private StudentServiceImpl studentService;
-	
-	
-	@Autowired
-	private ModelMapper mapper;
-	
-	
+
 	@GetMapping("/{studentID}")
 	public Student findByID(@PathVariable Long studentID) {
 		return studentService.findByIDOrThrowsException(studentID);
@@ -41,7 +34,7 @@ public class StudentControllers {
 
 	@PostMapping("submitStudent")
 	public Student submission(@RequestBody Student student) {
-		
+
 //	    String encodedPassword;
 //	    
 //	    //encode the password
@@ -56,42 +49,28 @@ public class StudentControllers {
 //
 //	    user.setTenantId(securityAccessor.getCurrentLoggedUser().getTenantId());
 
-		
-	studentService.saveStudent(student);
-		
+		studentService.saveStudent(student);
+
 		return student;
-		
+
 	}
-	
+
 	@PutMapping("/{studentID}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public String update(@RequestBody @Valid StudentInputDTO student, @PathVariable  Long studentID) {
+	public String update(@RequestBody @Valid Student student, @PathVariable Long studentID) {
 		Student studentBD = studentService.findByIDOrThrowsException(studentID);
 
-		mapper.map(student, studentBD);
-		
 		studentService.updateStudent(studentBD);
-		
+
 		return "new student is added";
-		
+
 	}
-	
+
 	@PostMapping("userLogin")
 	public Token login(@RequestBody Login login) {
-		
+
 		return studentService.login(login);
-			
+
 	}
-	
-	
-	
-	
-	private Student toDomain(StudentInputDTO input) {
-		
-		return mapper.map(input, Student.class);
-		
-	}
-	
 
 }
-

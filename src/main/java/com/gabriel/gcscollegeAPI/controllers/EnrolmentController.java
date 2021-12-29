@@ -19,23 +19,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.Enrolment;
+import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Employee;
+import com.gabriel.gcscollegeAPI.model.Enrolment;
 import com.gabriel.gcscollegeAPI.repositories.CourseRepository;
 import com.gabriel.gcscollegeAPI.services.CourseServiceImpl;
 import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
+import com.gabriel.gcscollegeAPI.services.EnrolmentServiceImpl;
+import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("api/courses")
-public class CourseControllers {
+@RequestMapping("api/enrolments")
+public class EnrolmentController {
 
+	@Autowired
+	private EnrolmentServiceImpl enrolmentService;
+	
 	@Autowired
 	private CourseServiceImpl courseService;
 	
 	@Autowired
-	private EmployeeServiceImpl employeeService;
-		
+	private StudentServiceImpl studentService;
+	
 	private Employee employee;
 
 	private int sizeOfList;
@@ -73,7 +81,7 @@ public class CourseControllers {
 
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Course booking(@RequestBody Course course) {
+	public Enrolment booking(@RequestBody Enrolment enrolment) {
 		
 		///  CREATE EMPLOY CLASSES
 		
@@ -85,8 +93,14 @@ public class CourseControllers {
 //		
 		//System.out.println("employee id = " + employee);
 		
-		return courseService.save(course);
+		 Enrolment save = enrolmentService.save(enrolment);
+		 Student found = studentService.findByIDOrThrowsException(save.getStudent().getId());
+		 Course courseFound = courseService.findOrThrowsException(save.getCourse().getId());
 		
+		 save.setCourse(courseFound);
+		 save.setStudent(found);
+		 
+		 return save;
 
 	}
 		
@@ -147,26 +161,26 @@ public class CourseControllers {
 	
 
 	@GetMapping
-	public List<Course> findAllCourses() {
-		return courseService.findAll();
+	public List<Enrolment> findAllCourses() {
+		return enrolmentService.findAll();
 	}
 
 	@GetMapping("/{idCourse}")
-	public Course findCourseById(@PathVariable Long id) {
-		return courseService.findOrThrowsException(id);
+	public Enrolment findCourseById(@PathVariable Long id) {
+		return enrolmentService.findOrThrowsException(id);
 	}
 
 	@PutMapping("/{idCourse}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public Course updateProduct(@RequestBody @Valid Course course, @PathVariable Long idCourse) {
-		courseService.findOrThrowsException(idCourse);
-		return courseService.update(course);
+	public Enrolment updateProduct(@RequestBody @Valid Enrolment course, @PathVariable Long idCourse) {
+		enrolmentService.findOrThrowsException(idCourse);
+		return enrolmentService.update(course);
 	}
 
 	@DeleteMapping("/{idCourse}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteProduct(@PathVariable Long idCourse) {
-		courseService.deleteCourse(idCourse);
+		enrolmentService.deleteCourse(idCourse);
 
 	}
 

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
 import com.gabriel.gcscollegeAPI.model.Course;
-import com.gabriel.gcscollegeAPI.model.EmployeeCourse;
 import com.gabriel.gcscollegeAPI.repositories.CourseRepository;
 
 
@@ -17,41 +17,36 @@ public class CourseServiceImpl {
 	@Autowired
 	private CourseRepository courseRepository;
 	
+	public List<Course> findAll() {
+		return courseRepository.findAll();
+	}
+	
 	@Transactional
-	public Course saveCourse(Course course) {
-
+	public Course save(Course course) {
 		return courseRepository.save(course);
-			
 	}
 	
 	
 	public List<Course> getCourses() {
-
 		return courseRepository.findAll();
 	}
 	
-    public String deleteCourse(long id) {
+	@Transactional
+    public void deleteCourse(Long id) {
+		findOrThrowsException(id);
     	courseRepository.deleteById(id);
-        return "product removed !! " + id;
     }
     
-	public Course getCourseById(int id) {
-		return courseRepository.findById((long) id).orElse(null);
-	}
-
-	public Course updateCourse(Course course) {
-		
-		Course existingCourse = courseRepository.findById(course.getId()).orElse(null);
+	@Transactional
+	public Course update(Course course) {
+		Course existingCourse = findOrThrowsException(course.getId());
 
         return courseRepository.save(existingCourse);
 	}
 
-
-	public Course getCourseById(Long id) {
-		return courseRepository.findById((long) id).orElse(null);
-		
+	public Course findOrThrowsException(Long id) {
+		return courseRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException(String.format("The course of id %d was not found!", id)));
 	}
-
-
 
 }

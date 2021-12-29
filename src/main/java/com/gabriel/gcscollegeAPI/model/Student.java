@@ -1,16 +1,13 @@
 package com.gabriel.gcscollegeAPI.model;
 
-import java.security.Permission;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.management.relation.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -55,21 +52,6 @@ public class Student {
 	@NotEmpty(message = "addres cannot be null")
 	private String address;
 	
-//	@Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Set<GrantedAuthorityImpl> authorities = new HashSet<GrantedAuthorityImpl>();
-//        for (Role role : roles) {
-//            for (Permission permission : role.getPermissions()) {
-//                GrantedAuthorityImpl authority = new GrantedAuthorityImpl(PERMISSION_PREFIX + permission.getPermission());
-//                authorities.add(authority);
-//            }
-//        }
-//        return authorities;
-   // }
-
-	public Student() {
-
-	}
 
 	public Long getId() {
 		return id;

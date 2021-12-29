@@ -1,14 +1,14 @@
 package com.gabriel.gcscollegeAPI.model;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 //following this tutorial
@@ -42,32 +42,8 @@ public class Course {
 	@NotNull
 	private String level;
 	
-	@OneToMany(mappedBy = "course")
-	Set<EmployeeCourse> employeeCourses;
-
-
-//    @ManyToMany(fetch = FetchType.LAZY,cascade = { CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinTable(name = "course_employee",joinColumns = { @JoinColumn(name = "course_id") },inverseJoinColumns = { @JoinColumn(name = "employee_id") })
-//    private Set<Employee> employees = new HashSet<Employee>();
-    
-	
-//	@ManyToOne
-//	@JoinTable(
-//			name="COURSE_EMPLOYEE"
-//			,joinColumns = {
-//					@JoinColumn(name="course_id")
-//			}
-//			,inverseJoinColumns = {
-//					@JoinColumn(name="employee_id")
-//			}
-//			
-//			)
-//	private List<EmployeeCourses> employeeCourses;
-//	
-	public Course() {
-		
-	}
-	
+	@NotNull
+	private int vacancies;
 	
 	public Long getId() {
 		return id;
@@ -101,13 +77,37 @@ public class Course {
 		this.period = period;
 	}
 	
-	@Override
-	public String toString() {
-		return "Course [id=" + id + ", courseStart=" + courseStart + ", courseEnd=" + courseEnd + ", period=" + period
-				+ ", level=" + level + "]";
+	public int getVacancies() {
+		return vacancies;
 	}
-	
+	public void setVacancies(int vacancies) {
+		this.vacancies = vacancies;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Course other = (Course) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 	
 	
 
