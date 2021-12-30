@@ -3,6 +3,7 @@ package com.gabriel.gcscollegeAPI.controllers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -82,25 +83,24 @@ public class EnrolmentController {
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Enrolment booking(@RequestBody Enrolment enrolment) {
-		
-		///  CREATE EMPLOY CLASSES
-		
+
+		/// CREATE EMPLOY CLASSES
+
 //		sizeOfList = courseService.getCourses().size();
 //		
 //		int sizeOfListNext = courseService.getCourses().size() + 1;
 //		
 //		System.out.println("course id = " + courseService.getCourseById(sizeOfList).getId());
 //		
-		//System.out.println("employee id = " + employee);
-		
-		 Enrolment save = enrolmentService.save(enrolment);
-		 Student found = studentService.findByIDOrThrowsException(save.getStudent().getId());
-		 Course courseFound = courseService.findOrThrowsException(save.getCourse().getId());
-		
-		 save.setCourse(courseFound);
-		 save.setStudent(found);
-		 
-		 return save;
+		// System.out.println("employee id = " + employee);
+
+		Student found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
+		Course courseFound = courseService.findOrThrowsException(enrolment.getCourse().getId());
+
+		enrolment.setCourse(courseFound);
+		enrolment.setStudent(found);
+		enrolment = enrolmentService.save(enrolment);
+		return enrolment;
 
 	}
 		
@@ -166,15 +166,17 @@ public class EnrolmentController {
 	}
 
 	@GetMapping("/{idCourse}")
-	public Enrolment findCourseById(@PathVariable Long id) {
-		return enrolmentService.findOrThrowsException(id);
+	public Enrolment findCourseById(@PathVariable Long idCourse) {
+		return enrolmentService.findOrThrowsException(idCourse);
 	}
 
 	@PutMapping("/{idCourse}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public Enrolment updateProduct(@RequestBody @Valid Enrolment course, @PathVariable Long idCourse) {
-		enrolmentService.findOrThrowsException(idCourse);
-		return enrolmentService.update(course);
+	public Enrolment updateProduct(@RequestBody Map<String, String> map, @PathVariable Long idCourse) {
+		Enrolment enrolment = enrolmentService.findOrThrowsException(idCourse);
+		String status = map.get("status");
+		status = status.toUpperCase();
+		return enrolmentService.updateStatus(enrolment, status);
 	}
 
 	@DeleteMapping("/{idCourse}")

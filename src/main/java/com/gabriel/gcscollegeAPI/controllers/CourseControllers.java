@@ -1,7 +1,5 @@
 package com.gabriel.gcscollegeAPI.controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Employee;
-import com.gabriel.gcscollegeAPI.repositories.CourseRepository;
 import com.gabriel.gcscollegeAPI.services.CourseServiceImpl;
 import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
 
@@ -149,6 +146,11 @@ public class CourseControllers {
 	@GetMapping
 	public List<Course> findAllCourses() {
 		return courseService.findAll();
+	}
+	
+	@GetMapping("/validCouses")
+	public List<Course> findAllValidCourses() {
+		return courseService.findAllValidCourses();
 	}
 
 	@GetMapping("/{idCourse}")

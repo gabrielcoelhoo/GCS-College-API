@@ -6,7 +6,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -31,6 +30,9 @@ public class Enrolment {
 	private Status status = Status.SENT;
 	
 
+	public void changeStatus(Status status) {
+		this.status = status;
+	}
 	public Long getId() {
 		return id;
 	}

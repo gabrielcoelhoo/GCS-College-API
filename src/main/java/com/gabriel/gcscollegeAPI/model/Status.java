@@ -7,4 +7,14 @@ public enum Status {
 	COMPLETED,
 	COLLECTED,
 	REFUSED;
+	
+	public static Status findByName(String name) {
+		for (Status status : values()) {
+			if(status.name().equals(name)) {
+				return status;
+			}
+		}
+		
+		return null;
+	}
 }

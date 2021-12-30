@@ -45,6 +45,10 @@ public class Course {
 	@NotNull
 	private int vacancies;
 	
+	public void decreaseVacancies() {
+		this.vacancies--;
+	}
+	
 	public Long getId() {
 		return id;
 	}
