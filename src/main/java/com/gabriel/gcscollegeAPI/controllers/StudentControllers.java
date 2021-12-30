@@ -1,10 +1,13 @@
 package com.gabriel.gcscollegeAPI.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -26,51 +30,52 @@ public class StudentControllers {
 
 	@Autowired
 	private StudentServiceImpl studentService;
-
+	
+	
+//answer back to the front if the id is not found
 	@GetMapping("/{studentID}")
 	public Student findByID(@PathVariable Long studentID) {
 		return studentService.findByIDOrThrowsException(studentID);
 	}
+	
+	@GetMapping("/all")
+	public List<Student> findAllCourses() {
+		return studentService.findAll();
+	}
 
-	@PostMapping("submitStudent")
-	public Student submission(@RequestBody Student student) {
-
-//	    String encodedPassword;
-//	    
-//	    //encode the password
-//	    encodedPassword = encoder.encode(student.getPassword());
-//	    
-//	    Set<Role> securityRoles = new HashSet<Role>();
-//
-//	    //get Role
-//	    securityRoles.add(roleDao.findById(userForm.getRoleId()));
-//
-//	    user.setRoles(securityRoles);
-//
-//	    user.setTenantId(securityAccessor.getCurrentLoggedUser().getTenantId());
+	@PostMapping("/submitStudent")
+	public String submission(@RequestBody Student student) {
 
 		studentService.saveStudent(student);
-
-		return student;
+		return "this student has been created successfully";
 
 	}
 
 	@PutMapping("/{studentID}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@ResponseStatus(value = HttpStatus.OK)
 	public String update(@RequestBody @Valid Student student, @PathVariable Long studentID) {
 		Student studentBD = studentService.findByIDOrThrowsException(studentID);
 
 		studentService.updateStudent(studentBD);
 
-		return "new student is added";
+		return "this student has been updated successfully";
 
 	}
 
-	@PostMapping("userLogin")
+	@PostMapping("/userLogin")
 	public Token login(@RequestBody Login login) {
 
 		return studentService.login(login);
 
 	}
+	
+	@DeleteMapping("/{idCourse}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public String deleteProduct(@PathVariable Long idCourse) {
+		studentService.deleteStudant(idCourse);
+		return "this course has been deleted successfully";
+
+	}
+
 
 }

@@ -47,52 +47,9 @@ public class EnrolmentController {
 	
 	private Employee employee;
 
-	private int sizeOfList;
-
-	
-
-	
-	// I KNOW THAT THERE IS A LOT OF COMMENTS
-	// BUT AS SOON AS I HAVE AN IDEA I NEED TO DECLARE IT
-	//I WILL REMOVE MOST OF THEM WHEN I FINISH
-	
-	
-
-	// working on this
-	// -get a course and check if there is any available spot
-	// 10 slots per sales person
-	// 4 persons in total
-	
-	//flow
-	//check spots availability? 
-	
-	//if yes send to a specific employee
-	//save in employee course db 
-	//save in course db
-	
-	//else
-	//return a message "there is not availability at the moment"
-	// in the future save it and set in a queue
-	
-
-	// in the future let this amount of slots and sales dynamically
-	// regarding adm orders
-
-	// where will I create the method to this verification before submitcourse ?
-
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Enrolment booking(@RequestBody Enrolment enrolment) {
-
-		/// CREATE EMPLOY CLASSES
-
-//		sizeOfList = courseService.getCourses().size();
-//		
-//		int sizeOfListNext = courseService.getCourses().size() + 1;
-//		
-//		System.out.println("course id = " + courseService.getCourseById(sizeOfList).getId());
-//		
-		// System.out.println("employee id = " + employee);
 
 		Student found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
 		Course courseFound = courseService.findOrThrowsException(enrolment.getCourse().getId());
@@ -103,62 +60,6 @@ public class EnrolmentController {
 		return enrolment;
 
 	}
-		
-		//System.out.println("employee id " + employee.getId());
-		
-				//return courseService.saveCourse(course);
-
-//		if (quantity <= 10) {
-//
-//			if (employee.getId() == 1) {
-//
-//				employeeCourseServiceImpl.saveEmployeeCourse(employeeCourse);
-//
-//			}
-//		} else if (quantity >= 11 & quantity <= 20) {
-//			
-//			if (employee.getId() == 2) {
-//
-//				employeeCourseServiceImpl.saveEmployeeCourse(employeeCourse);
-//
-//			}
-//
-//		} else if (quantity >= 21 & quantity <= 30) {
-//			
-//			if (employee.getId() == 3) {
-//
-//				employeeCourseServiceImpl.saveEmployeeCourse(employeeCourse);
-//
-//			}
-//
-//		} else if (quantity >= 31 & quantity <= 40) {
-//			
-//			if (employee.getId() == 4) {
-//
-//				employeeCourseServiceImpl.saveEmployeeCourse(employeeCourse);
-//
-//			}
-//
-//		} else {
-//			// selles are fully booked
-//		}
-//
-//		System.out.println(quantity);
-
-
-	
-	
-//	public boolean hasAvailableSpots(Course course, Employee employee) {
-//		
-//		
-//		courseService.getCourseById(course.getId());
-//		employee
-//
-//		
-//		return true;
-//	}
-//	
-	
 
 	@GetMapping
 	public List<Enrolment> findAllCourses() {

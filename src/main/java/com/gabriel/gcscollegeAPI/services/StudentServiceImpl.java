@@ -2,6 +2,7 @@ package com.gabriel.gcscollegeAPI.services;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gabriel.gcscollegeAPI.exception.InvalidEmailException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
+import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
@@ -54,6 +56,13 @@ public class StudentServiceImpl {
 //			throw new InvalidEmailException(String.format("The email %s is already registered", email));
 //		}
 //	}
+	
+	@Transactional
+	public void deleteStudant(Long id) {
+		findByIDOrThrowsException(id);
+		studentRepository.deleteById(id);
+	}
+
 
 	@Transactional
 	public Student updateStudent(Student student) {
@@ -92,6 +101,10 @@ public class StudentServiceImpl {
 	private Claims verifyToken(String token) {
 		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody();
 		return claims;
+	}
+
+	public List<Student> findAll() {
+		return studentRepository.findAll();
 	}
 
 	
