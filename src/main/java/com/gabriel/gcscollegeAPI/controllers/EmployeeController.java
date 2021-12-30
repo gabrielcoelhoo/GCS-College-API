@@ -33,36 +33,36 @@ public class EmployeeController {
 		return employeeService.findOrThrowsException(employeeId);
 	}
 	
-	@GetMapping
+	@GetMapping("/all")
 	public List<Employee> findAll() {
 		return employeeService.findAll();
 	}
 
-	@PostMapping
+	@PostMapping("/submitEmployee")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Employee submission(@RequestBody Employee employe) {
+	public String submission(@RequestBody Employee employee) {
 
-		employeeService.save(employe);
-
-		return employe;
+		employeeService.save(employee);
+		
+		return "this employee has been created successfully";	
 	}
 	
 	@PutMapping("/{employeeID}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@ResponseStatus(value = HttpStatus.OK)
 	public String update(@RequestBody @Valid Employee employee, @PathVariable Long employeeID) {
 		employeeService.findOrThrowsException(employeeID);
 
 		employeeService.update(employee);
 
-		return "new student is added";
+		return "this employee has been updated successfully";
 
 	}
 	
 	@DeleteMapping("/{employeeID}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@ResponseStatus(value = HttpStatus.OK)
 	public String delete(@PathVariable Long employeeID) {
 		employeeService.delete(employeeID);
-		return "new student is added";
+		return "this employee has been deleted successfully";
 
 	}
 	
