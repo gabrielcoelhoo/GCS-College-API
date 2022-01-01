@@ -49,7 +49,7 @@ public class EnrolmentController {
 
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Enrolment booking(@RequestBody Enrolment enrolment) {
+	public String booking(@RequestBody Enrolment enrolment) {
 
 		Student found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
 		Course courseFound = courseService.findOrThrowsException(enrolment.getCourse().getId());
@@ -57,33 +57,40 @@ public class EnrolmentController {
 		enrolment.setCourse(courseFound);
 		enrolment.setStudent(found);
 		enrolment = enrolmentService.save(enrolment);
-		return enrolment;
+		 
+		return "this enrolment has been created successfully";
 
 	}
 
-	@GetMapping
-	public List<Enrolment> findAllCourses() {
+	@GetMapping("/all")
+	public List<Enrolment> findAllEnrolment() {
 		return enrolmentService.findAll();
 	}
 
-	@GetMapping("/{idCourse}")
-	public Enrolment findCourseById(@PathVariable Long idCourse) {
-		return enrolmentService.findOrThrowsException(idCourse);
+	@GetMapping("/{idEnrolment}")
+	public Enrolment findEnrolmentById(@PathVariable Long idEnrolment) {
+		return enrolmentService.findOrThrowsException(idEnrolment);
 	}
 
 	@PutMapping("/{idCourse}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public Enrolment updateProduct(@RequestBody Map<String, String> map, @PathVariable Long idCourse) {
-		Enrolment enrolment = enrolmentService.findOrThrowsException(idCourse);
+	public String updateidEnrolment(@RequestBody Map<String, String> map, @PathVariable Long idEnrolment) {
+		Enrolment enrolment = enrolmentService.findOrThrowsException(idEnrolment);
 		String status = map.get("status");
 		status = status.toUpperCase();
-		return enrolmentService.updateStatus(enrolment, status);
+		enrolmentService.updateStatus(enrolment, status);
+		
+		 return "this enrolment has been updated successfully";
+
 	}
 
-	@DeleteMapping("/{idCourse}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void deleteProduct(@PathVariable Long idCourse) {
-		enrolmentService.deleteCourse(idCourse);
+	@DeleteMapping("/{idEnrolment}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public String deleteEnrolment(@PathVariable Long idEnrolment) {
+		enrolmentService.deleteCourse(idEnrolment);
+		
+		 return "this enrolment has been deleted successfully";
+
 
 	}
 

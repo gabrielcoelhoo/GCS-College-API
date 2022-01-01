@@ -65,9 +65,30 @@ public class StudentServiceImpl {
 
 
 	@Transactional
-	public Student updateStudent(Student student) {
-		return saveStudent(student);
+	public Student updateStudent(Student repStudent, Long studentID) {
+		
+		return studentRepository.findById(studentID)
+			      .map(student -> {
+			    	  student.setAddress(repStudent.getAddress());
+			    	  student.setCountry(repStudent.getCountry());
+			    	  student.setEmail(repStudent.getEmail());
+			    	  student.setName(repStudent.getName());
+			    	  student.setPassword(repStudent.getPassword());
+			    	  student.setPhoneNumber(repStudent.getPhoneNumber());
+			    	  student.setStudentComments(repStudent.getStudentComments());
+			    	  student.setSurname(repStudent.getSurname());
+			        return studentRepository.save(student);
+			      })
+			      .orElseGet(() -> {
+			    	  repStudent.setId(studentID);
+			        return studentRepository.save(repStudent);
+			      });	
+		
+		//method taken from 
+		//https://spring.io/guides/tutorials/rest/
 	}
+	
+	
 
 	public Token login(Login login) {
 
