@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gabriel.gcscollegeAPI.model.Employee;
+import com.gabriel.gcscollegeAPI.repositories.EmployeeRepository;
 import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
 
 @RestController
@@ -28,7 +29,12 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeServiceImpl employeeService;
 	
-	@GetMapping("/{employeeId}")
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
+	
+	
+	@GetMapping("/getById/{employeeId}")
 	public Employee findByID(@PathVariable Long employeeId) {
 		return employeeService.findOrThrowsException(employeeId);
 	}
@@ -38,7 +44,7 @@ public class EmployeeController {
 		return employeeService.findAll();
 	}
 
-	@PostMapping("/submitEmployee")
+	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String submission(@RequestBody Employee employee) {
 
@@ -47,18 +53,27 @@ public class EmployeeController {
 		return "this employee has been created successfully";	
 	}
 	
-	@PutMapping("/{employeeID}")
+	@PutMapping("/update/{employeeID}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public String update(@RequestBody @Valid Employee employee, @PathVariable Long employeeID) {
-		employeeService.findOrThrowsException(employeeID);
+	public Employee update(@RequestBody @Valid Employee repEmployee, @PathVariable Long employeeID) {
+		Employee employeeBD = employeeService.findOrThrowsException(employeeID);
 
-		employeeService.update(employee);
-
-		return "this employee has been updated successfully";
+		return employeeRepository.findById(employeeID)
+			      .map(employee -> {
+			    	  employee.setName(repEmployee.getName());
+			        return employeeRepository.save(employee);
+			      })
+			      .orElseGet(() -> {
+			    	  repEmployee.setId(employeeID);
+			        return employeeRepository.save(repEmployee);
+			      });
+		
+		//map function taken from 
+		//https://spring.io/guides/tutorials/rest/
 
 	}
 	
-	@DeleteMapping("/{employeeID}")
+	@DeleteMapping("/delete/{employeeID}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public String delete(@PathVariable Long employeeID) {
 		employeeService.delete(employeeID);

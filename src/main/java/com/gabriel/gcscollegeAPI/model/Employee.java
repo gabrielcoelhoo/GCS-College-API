@@ -21,6 +21,10 @@ public class Employee implements Serializable {
 	
 	private String name;
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}
