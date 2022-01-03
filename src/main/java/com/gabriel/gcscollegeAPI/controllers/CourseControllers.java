@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Employee;
+import com.gabriel.gcscollegeAPI.repositories.CourseRepository;
 import com.gabriel.gcscollegeAPI.services.CourseServiceImpl;
 import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
 
@@ -34,6 +35,9 @@ public class CourseControllers {
 	
 	@Autowired
 	private EmployeeServiceImpl employeeService;
+	
+	@Autowired
+	private CourseRepository courseRepository;
 		
 	private Employee employee;
 
@@ -47,7 +51,7 @@ public class CourseControllers {
 
 	// where will I create the method to this verification before submitcourse ?
 
-	@PostMapping("/submitCourse")
+	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String booking(@RequestBody Course course) {	
 		 courseService.save(course);
@@ -70,15 +74,31 @@ public class CourseControllers {
 		return courseService.findOrThrowsException(idCourse);
 	}
 
-	@PutMapping("/{idCourse}")
+	@PutMapping("/update/{idCourse}")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
-	public String updateProduct(@RequestBody @Valid Course course, @PathVariable Long idCourse) {
-		courseService.findOrThrowsException(idCourse);
-		 courseService.update(course);
-		 return "this course has been updated successfully";
+	public Course update(@RequestBody @Valid Course repCourse, @PathVariable Long idCourse) {
+		
+		Course courseBD = courseService.findOrThrowsException(idCourse);
+		 
+			return courseRepository.findById(idCourse)
+				      .map(course -> {
+				    	  course.setCourseEnd(repCourse.getCourseEnd());
+				    	  course.setCourseStart(repCourse.getCourseStart());
+				    	  course.setLevel(repCourse.getLevel());
+				    	  course.setPeriod(repCourse.getPeriod());
+				    	  course.setVacancies(repCourse.getVacancies());
+				        return courseRepository.save(course);
+				      })
+				      .orElseGet(() -> {
+				    	  repCourse.setId(idCourse);
+				        return courseRepository.save(repCourse);
+				      });	
+			
+			//method taken from 
+			//https://spring.io/guides/tutorials/rest/
 	}
 
-	@DeleteMapping("/{idCourse}")
+	@DeleteMapping("/delete/{idCourse}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public String deleteProduct(@PathVariable Long idCourse) {
 		courseService.deleteCourse(idCourse);

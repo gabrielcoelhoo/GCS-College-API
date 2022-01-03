@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +35,10 @@ public class StudentServiceImpl {
 	private String SECRET_KEY = "secret";	
 	
 
-	public Student findByIDOrThrowsException(Long id) {
-		return studentRepository.findById(id).orElseThrow(
-				() -> new ResourceNotFoundException(String.format("The Student of id %d was not found", id)));
-	}
+//	public boolean findByID(Long id) {
+//		return studentRepository.findById(id) != null;
+////				() -> new ResourceNotFoundException(String.format("The Student of id %d was not found", id)));
+//	}
 
 	@Transactional
 	public Student saveStudent(Student student) {
@@ -58,7 +59,7 @@ public class StudentServiceImpl {
 //	}
 	
 	@Transactional
-	public void deleteStudant(Long id) {
+	public void deleteStudent(Long id) {
 		findByIDOrThrowsException(id);
 		studentRepository.deleteById(id);
 	}
@@ -126,6 +127,11 @@ public class StudentServiceImpl {
 
 	public List<Student> findAll() {
 		return studentRepository.findAll();
+	}
+
+	public Student findByIDOrThrowsException(Long id) {
+		return studentRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException(String.format("The Student of id %d was not found", id)));
 	}
 
 	

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,10 +37,16 @@ public class StudentControllers {
 	private StudentRepository studentRepository;
 	
 	
-//answer back to the front if the id is not found
 	@GetMapping("/{studentID}")
 	public Student findByID(@PathVariable Long studentID) {
+		
 		return studentService.findByIDOrThrowsException(studentID);
+		
+//		if(studentService.findByID(studentID)) {
+//			return new ResponseEntity<>(, HttpStatus.OK);
+//		}else {
+//			return new ResponseEntity<>("User with ID = {studentID} not found", HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
 	}
 	
 	@GetMapping("/all")
@@ -48,6 +55,7 @@ public class StudentControllers {
 	}
 
 	@PostMapping("/create")
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public String submission(@RequestBody Student student) {
 
 		studentService.saveStudent(student);
@@ -56,7 +64,7 @@ public class StudentControllers {
 	}
 
 	@PutMapping("/update/{studentID}")
-	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public Student update(@RequestBody @Valid Student repStudent, @PathVariable Long studentID) {
 		Student studentBD = studentService.findByIDOrThrowsException(studentID);
 
@@ -89,10 +97,10 @@ public class StudentControllers {
 
 	}
 	
-	@DeleteMapping("/{idCourse}")
+	@DeleteMapping("/delete/{idCourse}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public String deleteProduct(@PathVariable Long idCourse) {
-		studentService.deleteStudant(idCourse);
+		studentService.deleteStudent(idCourse);
 		return "this course has been deleted successfully";
 
 	}

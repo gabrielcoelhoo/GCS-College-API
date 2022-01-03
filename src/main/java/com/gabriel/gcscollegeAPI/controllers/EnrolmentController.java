@@ -51,11 +51,11 @@ public class EnrolmentController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String booking(@RequestBody Enrolment enrolment) {
 
-		Student found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
+		//Student found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
 		Course courseFound = courseService.findOrThrowsException(enrolment.getCourse().getId());
 
 		enrolment.setCourse(courseFound);
-		enrolment.setStudent(found);
+		//enrolment.setStudent(found);
 		enrolment = enrolmentService.save(enrolment);
 		 
 		return "this enrolment has been created successfully";
