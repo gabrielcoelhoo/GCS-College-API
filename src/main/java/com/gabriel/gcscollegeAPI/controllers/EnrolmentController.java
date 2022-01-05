@@ -48,20 +48,22 @@ public class EnrolmentController {
 
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Enrolment booking(@RequestBody Enrolment enrolment) {
+	public String booking(@RequestBody Enrolment enrolment) {
 
 		Student found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
 		Course courseFound = courseService.findOrThrowsException(enrolment.getCourse().getId());
 		enrolment.setCourse(courseFound);
 		enrolment.setStudent(found);
 		enrolment = enrolmentService.save(enrolment);
-		return enrolment;
+		 
+		return "this enrolment has been created successfully";
 
 	}
 		
 
-	@GetMapping
-	public List<Enrolment> findAllEnrolments() {
+
+	@GetMapping("/all")
+	public List<Enrolment> findAllEnrolment() {
 		return enrolmentService.findAll();
 	}
 
@@ -82,10 +84,14 @@ public class EnrolmentController {
 		 enrolmentService.updateStatus(idEnrolment, status);
 	}
 
+
 	@DeleteMapping("/{idEnrolment}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public ResponseEntity<?> deleteEnrolment(@PathVariable Long idEnrolment) {
-		return ResponseEntity.ok().build().status(HttpStatus.NO_CONTENT).build();
+	@ResponseStatus(value = HttpStatus.OK)
+	public String deleteEnrolment(@PathVariable Long idEnrolment) {
+		enrolmentService.deleteCourse(idEnrolment);
+		
+		 return "this enrolment has been deleted successfully";
+
 
 	}
 

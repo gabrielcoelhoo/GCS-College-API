@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gabriel.gcscollegeAPI.model.Employee;
+import com.gabriel.gcscollegeAPI.repositories.EmployeeRepository;
 import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
 
 @RestController
@@ -28,41 +29,55 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeServiceImpl employeeService;
 	
-	@GetMapping("/{employeeId}")
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
+	
+	
+	@GetMapping("/getById/{employeeId}")
 	public Employee findByID(@PathVariable Long employeeId) {
 		return employeeService.findOrThrowsException(employeeId);
 	}
 	
-	@GetMapping
+	@GetMapping("/all")
 	public List<Employee> findAll() {
 		return employeeService.findAll();
 	}
 
-	@PostMapping
+	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Employee submission(@RequestBody Employee employe) {
+	public String submission(@RequestBody Employee employee) {
 
-		employeeService.save(employe);
-
-		return employe;
+		employeeService.save(employee);
+		
+		return "this employee has been created successfully";	
 	}
 	
-	@PutMapping("/{employeeID}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public String update(@RequestBody @Valid Employee employee, @PathVariable Long employeeID) {
-		employeeService.findOrThrowsException(employeeID);
+	@PutMapping("/update/{employeeID}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public Employee update(@RequestBody @Valid Employee repEmployee, @PathVariable Long employeeID) {
+		Employee employeeBD = employeeService.findOrThrowsException(employeeID);
 
-		employeeService.update(employee);
-
-		return "new student is added";
+		return employeeRepository.findById(employeeID)
+			      .map(employee -> {
+			    	  employee.setName(repEmployee.getName());
+			        return employeeRepository.save(employee);
+			      })
+			      .orElseGet(() -> {
+			    	  repEmployee.setId(employeeID);
+			        return employeeRepository.save(repEmployee);
+			      });
+		
+		//map function taken from 
+		//https://spring.io/guides/tutorials/rest/
 
 	}
 	
-	@DeleteMapping("/{employeeID}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@DeleteMapping("/delete/{employeeID}")
+	@ResponseStatus(value = HttpStatus.OK)
 	public String delete(@PathVariable Long employeeID) {
 		employeeService.delete(employeeID);
-		return "new student is added";
+		return "this employee has been deleted successfully";
 
 	}
 	
