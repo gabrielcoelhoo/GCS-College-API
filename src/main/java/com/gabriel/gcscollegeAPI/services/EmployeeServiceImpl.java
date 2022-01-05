@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gabriel.gcscollegeAPI.exception.BusinesException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
 import com.gabriel.gcscollegeAPI.model.Employee;
 import com.gabriel.gcscollegeAPI.repositories.EmployeeRepository;
@@ -23,6 +24,11 @@ public class EmployeeServiceImpl {
 
 	public List<Employee> findAll() {
 		return employeeRepository.findAll();
+	}
+	
+	public Employee getEmployeeAvailable() {
+		 List<Employee> employees = employeeRepository.findEmployeesAvailable();
+		 return employees.stream().findFirst().orElseThrow(() -> new BusinesException("There are not employees avaibale"));
 	}
 
 	@Transactional

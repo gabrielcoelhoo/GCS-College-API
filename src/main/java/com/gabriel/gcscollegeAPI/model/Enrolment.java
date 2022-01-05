@@ -21,8 +21,8 @@ public class Enrolment {
 	@OneToOne
 	private Student student;
 	
-//	@OneToOne
-//	private Employee employee;
+	@OneToOne
+	private Employee employee;
 
 	
 	@NotNull
@@ -64,6 +64,12 @@ public class Enrolment {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	
 	

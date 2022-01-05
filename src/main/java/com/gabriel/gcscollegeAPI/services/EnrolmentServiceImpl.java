@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gabriel.gcscollegeAPI.exception.BusinesException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
 import com.gabriel.gcscollegeAPI.model.Course;
+import com.gabriel.gcscollegeAPI.model.Employee;
 import com.gabriel.gcscollegeAPI.model.Enrolment;
 import com.gabriel.gcscollegeAPI.model.Status;
 import com.gabriel.gcscollegeAPI.repositories.EnrolmentRepository;
@@ -23,6 +24,8 @@ public class EnrolmentServiceImpl {
 	@Autowired
 	private CourseServiceImpl courseService;
 	
+	private EmployeeServiceImpl employeeService;
+	
 	public List<Enrolment> findAll() {
 		return enrolmentRepository.findAll();
 	}
@@ -36,6 +39,16 @@ public class EnrolmentServiceImpl {
 		}
 		course.decreaseVacancies();
 		course= courseService.save(course);
+		
+		
+		Employee employee = employeeService.getEmployeeAvailable();
+		employee.increaseQuantityEnrolments();
+		employeeService.update(employee);
+		
+		
+		enrolment.setEmployee(employee);
+		
+		
 		return enrolmentRepository.save(enrolment);
 	}
 	
@@ -51,7 +64,9 @@ public class EnrolmentServiceImpl {
     }
     
 	@Transactional
-	public Enrolment updateStatus(Enrolment enrolment, String status) {
+	public Enrolment updateStatus(Long idEnrolment, String status) {
+		
+		Enrolment enrolment = findOrThrowsException(idEnrolment);
 		Status current = enrolment.getStatus();
 		Status statusInput = Status.findByName(status);
 		
@@ -63,27 +78,44 @@ public class EnrolmentServiceImpl {
 			throw new BusinesException(String.format("Status %d invalid", status));
 		}
 		
-		if(current == Status.ANALYSIS) {
-			if(statusInput == current) {
-				throw new BusinesException("You are informing the same status");
-			}
-		}
-		
-		if(current == Status.COMPLETED) {
+		if(current == Status.COMPLETED ||current == Status.REFUSED) {
 			if(statusInput == current) {
 				throw new BusinesException("You are informing the same status");
 			}
 			
-			if(statusInput == Status.ANALYSIS) {
+			if(statusInput == Status.SENT) {
 				throw new BusinesException(String.format("The current status %s cannot have the status %s", current, status));
 			}
 		}
 		
 		enrolment.changeStatus(statusInput);
+		
+		Employee employee = enrolment.getEmployee();
+		employee.decreaseQuantityEnrolments();
+		employeeService.save(employee);
+		
+		enrolment.setEmployee(employee);
+		
 
         return enrolmentRepository.save(enrolment);
 	}
 
+	@Transactional
+	public Enrolment updateEnrolment(Long idEnrolment, Long idnewCourse) {
+		Enrolment enrolment = findOrThrowsException(idEnrolment);
+		if(enrolment.getStatus() != Status.SENT) {
+			throw new BusinesException(String.format("The enrolment of id %s cannot be updated", idEnrolment));
+		}
+		
+		Course course = courseService.findOrThrowsException(idnewCourse);
+		course.decreaseVacancies();
+		courseService.update(course);
+		
+		enrolment.setCourse(course);
+		
+		return save(enrolment);
+		
+	}
 	public Enrolment findOrThrowsException(Long id) {
 		return enrolmentRepository.findById(id).orElseThrow(
 				() -> new ResourceNotFoundException(String.format("The enrolment of id %d was not found!", id)));
