@@ -1,5 +1,8 @@
 package com.gabriel.gcscollegeAPI.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,7 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -52,9 +56,28 @@ public class Student {
 	@NotEmpty(message = "addres cannot be null")
 	private String address;
 	
+	 @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	    @JoinTable(name = "STUDENT_ROLE",
+	            joinColumns = {
+	                    @JoinColumn(name = "STUDENT_ID")
+	            },
+	            inverseJoinColumns = {
+	                    @JoinColumn(name = "ROLE_ID")
+	            }
+	    )
+	 
+	
+	private Set<Role> role;
+	
+	
+	public Set<Role> getRole() {
+		return role;
+	}
 
-	
-	
+	public void setRole(Set<Role> role) {
+		this.role = role;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
