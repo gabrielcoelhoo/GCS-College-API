@@ -49,11 +49,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-	            EmailDetails emailDetails = jwtService.loadUserByEmail(email);
+	            UserDetails userDetails = jwtService.loadUserByEmail(email);
 
 	            if (jwtUtil.validateToken(jwtToken, emailDetails)) {
 
-	                EmailPasswordAuthenticationToken emailPasswordAuthenticationToken = new EmailPasswordAuthenticationToken(emailDetails, null, emailDetails.getAuthorities());
+	                EmailPasswordAuthenticationToken emailPasswordAuthenticationToken = new EmailPasswordAuthenticationToken(emailDetails, null, userDetails.getAuthorities());
 	                emailPasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 	                SecurityContextHolder.getContext().setAuthentication(emailPasswordAuthenticationToken);
 	            }
