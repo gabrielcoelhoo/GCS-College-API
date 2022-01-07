@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -26,12 +27,12 @@ public class JwtService implements UserDetailsService {
 
     @Autowired
     private JwtUtil jwtUtil;
-    
-    @Autowired
-    private Student student;
 
     @Autowired
     private StudentRepository studentRepository;
+    
+    @Autowired 
+    private StudentServiceImpl studentServiceImpl;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -47,21 +48,17 @@ public class JwtService implements UserDetailsService {
         Student student = studentRepository.findById(userEmail).get();
         return new JwtResponse(student, newGeneratedToken);
     }
-
-    @Override
-    public UserDetails loadUserByUsername(student) throws UsernameNotFoundException {
+    
+    @Bean
+    public UserDetailsService userDetailsService() {
+		return (UserDetailsService) email -> {
+			Optional<Student> student = studentServiceImpl.findUserByEmail(email);
+			if(student.isEmpty()) {
+				throw new UsernameNotFoundException("No user found with email address" + email);
+			}
+			return (UserDetails) student.get();
+		};
     	
-    	studentRepository.findByEmail(student);
-
-        if (student != null) {
-            return new org.springframework.security.core.userdetails.User(
-            		student,
-            		student.getUserPassword(),
-                    getAuthority(student)
-            );
-        } else {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
     }
 
     private Set getAuthority(Student student) {
@@ -87,4 +84,5 @@ public class JwtService implements UserDetailsService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

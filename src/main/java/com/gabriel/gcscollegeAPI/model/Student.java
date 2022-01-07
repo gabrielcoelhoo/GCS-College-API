@@ -65,8 +65,15 @@ public class Student {
 	                    @JoinColumn(name = "ROLE_ID")
 	            }
 	    )
-	 
 	
+	public String getUsername() {
+		return email;
+	}
+
+	public void setUsername(String email) {
+		this.email = email;
+	}
+
 	private Set<Role> role;
 	
 	

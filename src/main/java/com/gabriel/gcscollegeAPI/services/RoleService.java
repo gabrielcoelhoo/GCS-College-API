@@ -9,7 +9,6 @@ import com.gabriel.gcscollegeAPI.repositories.RoleRepository;
 @Service
 public class RoleService {
 
-
     @Autowired
     private RoleRepository roleRepository;
 

@@ -50,11 +50,16 @@ public class StudentServiceImpl {
 //		return studentRepository.findById(id) != null;
 ////				() -> new ResourceNotFoundException(String.format("The Student of id %d was not found", id)));
 //	}
+	 
+	 public Optional<Student> findUserByEmail(String email){
+		return studentRepository.findUserByEmail(email);
+		 
+	 }
 
 	@Transactional
 	public Student saveStudent(Student student) {
 
-		Optional<Student> found = Optional.ofNullable(studentRepository.findByEmail(student.getEmail()));
+		Optional<Optional<Student>> found = Optional.ofNullable(studentRepository.findUserByEmail(student.getEmail()));
 		
 		if (found.isPresent() && !found.get().equals(student)) {
 			throw new InvalidEmailException(String.format("The email %s is already registered", student.getEmail()));
@@ -147,15 +152,6 @@ public class StudentServiceImpl {
 
 	
 	///////////////////////////////////////////////////////////////
-	
-//	  @Autowired
-//	    private UserDao userDao;
-//
-//	    @Autowired
-//	    private RoleDao roleRepository;
-//
-//	    @Autowired
-//	    private PasswordEncoder passwordEncoder;
 
 	    public void initRoleAndUser() {
 
@@ -169,25 +165,21 @@ public class StudentServiceImpl {
 	        userRole.setRoleDescription("Default role for newly created record");
 	        roleRepository.save(userRole);
 
-	         adminUser = new User();
-	        adminUser.setUserName("admin123");
-	        adminUser.setUserPassword(getEncodedPassword("admin@pass"));
-	        adminUser.setUserFirstName("admin");
-	        adminUser.setUserLastName("admin");
+	        Student adminUser = new Student();
+	        adminUser.setAddress("4 henry st");
+	        adminUser.setCountry("ireland");
+	        adminUser.setEmail("admin@admin.com");
+	        adminUser.setName("admin");
+	        adminUser.setPassword(getEncodedPassword("admin"));
+	        adminUser.setPhoneNumber("1234567890");
+	        adminUser.setStudentComments("admin register");
+	        adminUser.setSurname("boss");
+	        adminUser.setUsername("admin@admin.com");
 	        Set<Role> adminRoles = new HashSet<>();
 	        adminRoles.add(adminRole);
 	        adminUser.setRole(adminRoles);
-	        roleRepository.save(adminUser);
+	        studentRepository.save(adminUser);
 
-//	        User user = new User();
-//	        user.setUserName("raj123");
-//	        user.setUserPassword(getEncodedPassword("raj@123"));
-//	        user.setUserFirstName("raj");
-//	        user.setUserLastName("sharma");
-//	        Set<Role> userRoles = new HashSet<>();
-//	        userRoles.add(userRole);
-//	        user.setRole(userRoles);
-//	        roleRepository.save(user);
 	    }
 
 	    public Student registerNewStudent(Student student) {
@@ -197,7 +189,7 @@ public class StudentServiceImpl {
 	        student.setRole(userRoles);
 	        student.setPassword(getEncodedPassword(student.getPassword()));
 
-	        return roleRepository.save(student);
+	        return studentRepository.save(student);
 	    }
 
 	    public String getEncodedPassword(String password) {
@@ -205,7 +197,3 @@ public class StudentServiceImpl {
 	    }
 	}
 	
-	
-
-
-}

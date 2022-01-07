@@ -14,11 +14,7 @@ import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
 
 @RestController
 public class UserController {
-	
-	//need to be modified to fall into student controller
-
   
-    
     @Autowired
     private StudentServiceImpl studentServiceImpl;
 
@@ -26,7 +22,9 @@ public class UserController {
     public void initRoleAndUser() {
     	studentServiceImpl.initRoleAndUser();
     }
-
+    
+    //I need to this method cuz in student controller is saving an user as well
+    
     @PostMapping({"/registerNewUser"})
     public Student registerNewUser(@RequestBody Student student) {
         return studentServiceImpl.registerNewStudent(student);

@@ -10,7 +10,7 @@ import com.gabriel.gcscollegeAPI.model.Student;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-	Student findByEmail(String email);
+	Optional<Student> findUserByEmail(String email);
 
 	Optional<Student> findById(String userEmail);
 

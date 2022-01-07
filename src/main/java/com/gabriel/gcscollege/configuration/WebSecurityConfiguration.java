@@ -39,7 +39,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     
-//    import org.springframework.http.HttpHeaders;
+    //in the original project inside of parenthesis is : (HttpHeaders.ALLOW)
+//.antMatchers(org.springframework.http.HttpHeaders.ALLOW).permitAll()
     
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -52,6 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                
         ;
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

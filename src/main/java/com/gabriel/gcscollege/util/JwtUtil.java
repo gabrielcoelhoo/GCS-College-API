@@ -14,12 +14,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtUtil {
+	
 
-    private static final String SECRET_KEY = "learn_programming_yourself";
+    private static final String SECRET_KEY = "gabcoelho_cctcollege";
 
     private static final int TOKEN_VALIDITY = 3600 * 5;
 
-    public String getEmailFromToken(String token) {
+    public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -33,7 +34,7 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String student = getEmailFromToken(token);
+        final String student = getUsernameFromToken(token);
         return (student.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 

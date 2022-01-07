@@ -4,14 +4,11 @@ public class JwtResponse {
 	
 	private Student student;
 	private String jwtToken;
-	
-	
-	
+
 	public JwtResponse(Student student, String jwtToken) {
 		this.student = student;
 		this.jwtToken = jwtToken;
 	}
-	
 	
 	public Student getStudent() {
 		return student;
