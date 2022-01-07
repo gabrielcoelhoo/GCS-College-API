@@ -2,13 +2,16 @@ package com.gabriel.gcscollegeAPI.services;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +19,10 @@ import com.gabriel.gcscollegeAPI.exception.InvalidEmailException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
 import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Login;
+import com.gabriel.gcscollegeAPI.model.Role;
 import com.gabriel.gcscollegeAPI.model.Student;
 import com.gabriel.gcscollegeAPI.model.Token;
+import com.gabriel.gcscollegeAPI.repositories.RoleRepository;
 import com.gabriel.gcscollegeAPI.repositories.StudentRepository;
 
 import io.jsonwebtoken.Claims;
@@ -31,8 +36,14 @@ public class StudentServiceImpl {
 
 	@Autowired
 	private StudentRepository studentRepository;
+	
+	 @Autowired
+	 private PasswordEncoder passwordEncoder;
+	 
+	 @Autowired
+	 private RoleRepository roleRepository;
 
-	private String SECRET_KEY = "secret";	
+//	private String SECRET_KEY = "secret";	
 	
 
 //	public boolean findByID(Long id) {
@@ -91,39 +102,39 @@ public class StudentServiceImpl {
 	
 	
 
-	public Token login(Login login) {
-
-		Student student = studentRepository.findByEmail(login.getEmail());
-		if (student == null) {
-			throw new RuntimeException("User does not exist.");
-		}
-		if (!student.getPassword().equals(login.getPassword())) {
-			throw new RuntimeException("Password mismatch.");
-		}
-		return createJWT("cbwa", student.getEmail(), "gabriel");
-	}
-
-
-	// creation of token
-
-	private Token createJWT(String id, String subject, String issuer) {
-		long nowMillis = System.currentTimeMillis();
-		Date now = new Date(nowMillis);
-		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-		byte[] apiKeySecretBytes = SECRET_KEY.getBytes();
-		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-		// Let's set the JWT Claims
-		JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject).setIssuer(issuer)
-				.signWith(signatureAlgorithm, signingKey);
-		// https://github.com/oktadev/okta-java-jwt-example/blob/master/src/main/java/com/okta/createverifytokens/JWTDemo.java
-		// Here shows how to add expiration.
-		return new Token(builder.compact());
-	}
-
-	private Claims verifyToken(String token) {
-		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody();
-		return claims;
-	}
+//	public Token login(Login login) {
+//
+//		Student student = studentRepository.findByEmail(login.getEmail());
+//		if (student == null) {
+//			throw new RuntimeException("User does not exist.");
+//		}
+//		if (!student.getPassword().equals(login.getPassword())) {
+//			throw new RuntimeException("Password mismatch.");
+//		}
+//		return createJWT("cbwa", student.getEmail(), "gabriel");
+//	}
+//
+//
+//	// creation of token
+//
+//	private Token createJWT(String id, String subject, String issuer) {
+//		long nowMillis = System.currentTimeMillis();
+//		Date now = new Date(nowMillis);
+//		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+//		byte[] apiKeySecretBytes = SECRET_KEY.getBytes();
+//		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+//		// Let's set the JWT Claims
+//		JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject).setIssuer(issuer)
+//				.signWith(signatureAlgorithm, signingKey);
+//		// https://github.com/oktadev/okta-java-jwt-example/blob/master/src/main/java/com/okta/createverifytokens/JWTDemo.java
+//		// Here shows how to add expiration.
+//		return new Token(builder.compact());
+//	}
+//
+//	private Claims verifyToken(String token) {
+//		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody();
+//		return claims;
+//	}
 
 	public List<Student> findAll() {
 		return studentRepository.findAll();
@@ -141,58 +152,58 @@ public class StudentServiceImpl {
 //	    private UserDao userDao;
 //
 //	    @Autowired
-//	    private RoleDao roleDao;
+//	    private RoleDao roleRepository;
 //
 //	    @Autowired
 //	    private PasswordEncoder passwordEncoder;
-//
-//	    public void initRoleAndUser() {
-//
-//	        Role adminRole = new Role();
-//	        adminRole.setRoleName("Admin");
-//	        adminRole.setRoleDescription("Admin role");
-//	        roleDao.save(adminRole);
-//
-//	        Role userRole = new Role();
-//	        userRole.setRoleName("User");
-//	        userRole.setRoleDescription("Default role for newly created record");
-//	        roleDao.save(userRole);
-//
-//	        User adminUser = new User();
-//	        adminUser.setUserName("admin123");
-//	        adminUser.setUserPassword(getEncodedPassword("admin@pass"));
-//	        adminUser.setUserFirstName("admin");
-//	        adminUser.setUserLastName("admin");
-//	        Set<Role> adminRoles = new HashSet<>();
-//	        adminRoles.add(adminRole);
-//	        adminUser.setRole(adminRoles);
-//	        userDao.save(adminUser);
-//
-////	        User user = new User();
-////	        user.setUserName("raj123");
-////	        user.setUserPassword(getEncodedPassword("raj@123"));
-////	        user.setUserFirstName("raj");
-////	        user.setUserLastName("sharma");
-////	        Set<Role> userRoles = new HashSet<>();
-////	        userRoles.add(userRole);
-////	        user.setRole(userRoles);
-////	        userDao.save(user);
-//	    }
-//
-//	    public User registerNewUser(User user) {
-//	        Role role = roleDao.findById("User").get();
+
+	    public void initRoleAndUser() {
+
+	        Role adminRole = new Role();
+	        adminRole.setRoleName("Admin");
+	        adminRole.setRoleDescription("Admin role");
+	        roleRepository.save(adminRole);
+
+	        Role userRole = new Role();
+	        userRole.setRoleName("User");
+	        userRole.setRoleDescription("Default role for newly created record");
+	        roleRepository.save(userRole);
+
+	         adminUser = new User();
+	        adminUser.setUserName("admin123");
+	        adminUser.setUserPassword(getEncodedPassword("admin@pass"));
+	        adminUser.setUserFirstName("admin");
+	        adminUser.setUserLastName("admin");
+	        Set<Role> adminRoles = new HashSet<>();
+	        adminRoles.add(adminRole);
+	        adminUser.setRole(adminRoles);
+	        roleRepository.save(adminUser);
+
+//	        User user = new User();
+//	        user.setUserName("raj123");
+//	        user.setUserPassword(getEncodedPassword("raj@123"));
+//	        user.setUserFirstName("raj");
+//	        user.setUserLastName("sharma");
 //	        Set<Role> userRoles = new HashSet<>();
-//	        userRoles.add(role);
+//	        userRoles.add(userRole);
 //	        user.setRole(userRoles);
-//	        user.setUserPassword(getEncodedPassword(user.getUserPassword()));
-//
-//	        return userDao.save(user);
-//	    }
-//
-//	    public String getEncodedPassword(String password) {
-//	        return passwordEncoder.encode(password);
-//	    }
-//	}
+//	        roleRepository.save(user);
+	    }
+
+	    public Student registerNewStudent(Student student) {
+	        Role role = roleRepository.findById("Student").get();
+	        Set<Role> userRoles = new HashSet<>();
+	        userRoles.add(role);
+	        student.setRole(userRoles);
+	        student.setPassword(getEncodedPassword(student.getPassword()));
+
+	        return roleRepository.save(student);
+	    }
+
+	    public String getEncodedPassword(String password) {
+	        return passwordEncoder.encode(password);
+	    }
+	}
 	
 	
 

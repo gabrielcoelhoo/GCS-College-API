@@ -1,6 +1,7 @@
 package com.gabriel.gcscollegeAPI.services;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,63 +15,76 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.gabriel.gcscollege.util.JwtUtil;
 import com.gabriel.gcscollegeAPI.model.JwtRequest;
 import com.gabriel.gcscollegeAPI.model.JwtResponse;
+import com.gabriel.gcscollegeAPI.model.Student;
+import com.gabriel.gcscollegeAPI.repositories.StudentRepository;
 
 @Service
 public class JwtService implements UserDetailsService {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private Student student;
 
     @Autowired
-    private UserDao userDao;
+    private StudentRepository studentRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
-        String userName = jwtRequest.getUserName();
-        String userPassword = jwtRequest.getUserPassword();
-        authenticate(userName, userPassword);
+        String userEmail = jwtRequest.getUserEmail();
+        String userPassword = jwtRequest.getUserPasword();
+        authenticate(userEmail, userPassword);
 
-        UserDetails userDetails = loadUserByUsername(userName);
+        UserDetails userDetails = loadUserByUsername(userEmail);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
-        User user = userDao.findById(userName).get();
-        return new JwtResponse(user, newGeneratedToken);
+        Student student = studentRepository.findById(userEmail).get();
+        return new JwtResponse(student, newGeneratedToken);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findById(username).get();
+    public UserDetails loadUserByUsername(student) throws UsernameNotFoundException {
+    	
+    	studentRepository.findByEmail(student);
 
-        if (user != null) {
+        if (student != null) {
             return new org.springframework.security.core.userdetails.User(
-                    user.getUserName(),
-                    user.getUserPassword(),
-                    getAuthority(user)
+            		student,
+            		student.getUserPassword(),
+                    getAuthority(student)
             );
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
 
-    private Set getAuthority(User user) {
+    private Set getAuthority(Student student) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        user.getRole().forEach(role -> {
+        student.getRole().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
         });
         return authorities;
     }
 
-    private void authenticate(String userName, String userPassword) throws Exception {
+    private void authenticate(String userEmail, String userPassword) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userEmail, userPassword));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.JwtRequest;
+import com.gabriel.gcscollegeAPI.model.JwtResponse;
+import com.gabriel.gcscollegeAPI.services.JwtService;
+
 @RestController
 @CrossOrigin
 public class JwtController {

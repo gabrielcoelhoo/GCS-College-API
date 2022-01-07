@@ -9,22 +9,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.Student;
+import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
+
 @RestController
 public class UserController {
 	
 	//need to be modified to fall into student controller
 
+  
+    
     @Autowired
-    private UserService userService;
+    private StudentServiceImpl studentServiceImpl;
 
     @PostConstruct
     public void initRoleAndUser() {
-        userService.initRoleAndUser();
+    	studentServiceImpl.initRoleAndUser();
     }
 
     @PostMapping({"/registerNewUser"})
-    public User registerNewUser(@RequestBody User user) {
-        return userService.registerNewUser(user);
+    public Student registerNewUser(@RequestBody Student student) {
+        return studentServiceImpl.registerNewStudent(student);
     }
 
     @GetMapping({"/forAdmin"})

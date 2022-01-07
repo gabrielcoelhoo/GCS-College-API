@@ -91,12 +91,12 @@ public class StudentControllers {
 
 	}
 
-	@PostMapping("/userLogin")
-	public Token login(@RequestBody Login login) {
-
-		return studentService.login(login);
-
-	}
+//	@PostMapping("/userLogin")
+//	public Token login(@RequestBody Login login) {
+//
+//		return studentService.login(login);
+//
+//	}
 	
 	@DeleteMapping("/delete/{idCourse}")
 	@ResponseStatus(value = HttpStatus.OK)

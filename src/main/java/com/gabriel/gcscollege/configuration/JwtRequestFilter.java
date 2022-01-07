@@ -15,6 +15,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.gabriel.gcscollege.util.JwtUtil;
+import com.gabriel.gcscollegeAPI.services.JwtService;
+
 import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
@@ -49,13 +52,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-	            UserDetails userDetails = jwtService.loadUserByEmail(email);
+	            UserDetails userDetails = jwtService.loadUserByUsername(email);
 
-	            if (jwtUtil.validateToken(jwtToken, emailDetails)) {
+	            if (jwtUtil.validateToken(jwtToken, userDetails)) {
 
-	                EmailPasswordAuthenticationToken emailPasswordAuthenticationToken = new EmailPasswordAuthenticationToken(emailDetails, null, userDetails.getAuthorities());
-	                emailPasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-	                SecurityContextHolder.getContext().setAuthentication(emailPasswordAuthenticationToken);
+	                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+	                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+	                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 	            }
 	        }
 	        filterChain.doFilter(request, response);
