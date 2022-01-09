@@ -1,7 +1,9 @@
 package com.gabriel.gcscollegeAPI.controllers;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.Token;
 import com.gabriel.gcscollegeAPI.model.User;
 import com.gabriel.gcscollegeAPI.repositories.UserRepository;
 import com.gabriel.gcscollegeAPI.services.UserServiceImpl;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("api/users")
 public class UserControllers {
+	
+	private String SECRET_KEY = "secret";
 
 	@Autowired
 	private UserServiceImpl userServiceImpl;
@@ -53,6 +63,10 @@ public class UserControllers {
 	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String submission(@RequestBody User user) {
+		
+//		 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//		    String encodedPassword = passwordEncoder.encode(user.getPassword());
+//		    user.setPassword(encodedPassword);
 
 		userServiceImpl.saveUser(user);
 		return "this student has been created successfully";
@@ -87,9 +101,9 @@ public class UserControllers {
 	}
 
 //	@PostMapping("/userLogin")
-//	public Token login(@RequestBody Login login) {
+//	public Token login(@RequestBody User user) {
 //
-//		return studentService.login(login);
+//		return userServiceImpl.login(user);
 //
 //	}
 	
@@ -99,6 +113,28 @@ public class UserControllers {
 	userServiceImpl.deleteUser(idCourse);
 		return "this course has been deleted successfully";
 
+	}
+
+
+	// creation of token
+
+	private Token createJWT(String id, String subject, String issuer) {
+		long nowMillis = System.currentTimeMillis();
+		Date now = new Date(nowMillis);
+		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+		byte[] apiKeySecretBytes = SECRET_KEY.getBytes();
+		SecretKeySpec signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+		// Let's set the JWT Claims
+		JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject).setIssuer(issuer)
+				.signWith(signatureAlgorithm, signingKey);
+		// https://github.com/oktadev/okta-java-jwt-example/blob/master/src/main/java/com/okta/createverifytokens/JWTDemo.java
+		// Here shows how to add expiration.
+		return new Token(builder.compact());
+	}
+
+	private Claims verifyToken(String token) {
+		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody();
+		return claims;
 	}
 
 

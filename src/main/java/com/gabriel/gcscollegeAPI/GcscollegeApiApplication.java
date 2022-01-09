@@ -10,6 +10,5 @@ public class GcscollegeApiApplication {
 		SpringApplication.run(GcscollegeApiApplication.class, args);
 	}
 	
-	
 
 }
