@@ -9,5 +9,7 @@ public class GcscollegeApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GcscollegeApiApplication.class, args);
 	}
+	
+	
 
 }

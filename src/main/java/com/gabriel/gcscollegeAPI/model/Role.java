@@ -23,8 +23,8 @@ public class Role {
 	@NotEmpty
 	private String name;
 	
-	@OneToMany(targetEntity = User.class, mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<User> users;
+//	@OneToMany(targetEntity = User.class, mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	private Set<User> users;
 
 	public Role() {
 	}

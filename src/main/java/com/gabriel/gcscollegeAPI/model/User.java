@@ -45,15 +45,11 @@ public class User {
 
 	@Column(nullable = false, length = 45)
 	@NotEmpty
-	private String studentComments;
+	private String userComments;
 	
 	@Column(nullable = false, length = 45)
 	@NotEmpty(message = "addres cannot be null")
 	private String address;
-	
-	@ManyToOne
-	@JoinColumn(name = "role_id")
-	private Role role;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -118,13 +114,14 @@ public class User {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	
 
-	public String getStudentComments() {
-		return studentComments;
+	public String getUserComments() {
+		return userComments;
 	}
 
-	public void setStudentComments(String studentComments) {
-		this.studentComments = studentComments;
+	public void setUserComments(String userComments) {
+		this.userComments = userComments;
 	}
 
 	@Override
@@ -152,12 +149,6 @@ public class User {
 		return true;
 	}
 
-	public Role getRole() {
-		return role;
-	}
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
 
 }

@@ -9,6 +9,6 @@ import com.gabriel.gcscollegeAPI.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	User findByEmail(@Param("email") String email);
+	User findByEmail(String email);
 	
 }
