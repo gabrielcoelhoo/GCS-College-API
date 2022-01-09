@@ -27,43 +27,31 @@ import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/courses")
 public class CourseControllers {
-	
-	//all methods verified through postman
 
 	@Autowired
 	private CourseServiceImpl courseService;
-	
+
 	@Autowired
 	private EmployeeServiceImpl employeeService;
-	
+
 	@Autowired
 	private CourseRepository courseRepository;
-		
+
 	private Employee employee;
-
-	// working on this
-	// -get a course and check if there is any available spot
-	// 10 slots per sales person
-	// 4 persons in total
-	
-	// in the future let this amount of slots and sales dynamically
-	// regarding adm orders
-
-	// where will I create the method to this verification before submitcourse ?
 
 	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public String booking(@RequestBody Course course) {	
-		 courseService.save(course);
-		 return "this course has been created successfully";
+	public String booking(@RequestBody Course course) {
+		courseService.save(course);
+		return "this course has been created successfully";
 	}
 
 	@GetMapping("/all")
 	public List<Course> findAllCourses() {
 		return courseService.findAll();
 	}
-	
-	//courses created at the moment
+
+	// courses created at the moment
 	@GetMapping("/validCouses")
 	public List<Course> findAllValidCourses() {
 		return courseService.findAllValidCourses();
@@ -77,25 +65,21 @@ public class CourseControllers {
 	@PutMapping("/update/{idCourse}")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public Course update(@RequestBody @Valid Course repCourse, @PathVariable Long idCourse) {
-		
+
 		Course courseBD = courseService.findOrThrowsException(idCourse);
-		 
-			return courseRepository.findById(idCourse)
-				      .map(course -> {
-				    	  course.setCourseEnd(repCourse.getCourseEnd());
-				    	  course.setCourseStart(repCourse.getCourseStart());
-				    	  course.setLevel(repCourse.getLevel());
-				    	  course.setPeriod(repCourse.getPeriod());
-				    	  course.setVacancies(repCourse.getVacancies());
-				        return courseRepository.save(course);
-				      })
-				      .orElseGet(() -> {
-				    	  repCourse.setId(idCourse);
-				        return courseRepository.save(repCourse);
-				      });	
-			
-			//method taken from 
-			//https://spring.io/guides/tutorials/rest/
+
+		return courseRepository.findById(idCourse).map(course -> {
+			course.setCourseEnd(repCourse.getCourseEnd());
+			course.setCourseStart(repCourse.getCourseStart());
+			course.setLevel(repCourse.getLevel());
+			course.setPeriod(repCourse.getPeriod());
+			course.setVacancies(repCourse.getVacancies());
+			return courseRepository.save(course);
+		}).orElseGet(() -> {
+			repCourse.setId(idCourse);
+			return courseRepository.save(repCourse);
+		});
+
 	}
 
 	@DeleteMapping("/delete/{idCourse}")

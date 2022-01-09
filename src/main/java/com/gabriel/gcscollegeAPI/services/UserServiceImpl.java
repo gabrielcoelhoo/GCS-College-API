@@ -29,8 +29,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
- 
-//	private String SECRET_KEY = "secret";	
 	
 
 //	public boolean findByID(Long id) {
@@ -89,42 +87,6 @@ public class UserServiceImpl implements UserService{
 		//https://spring.io/guides/tutorials/rest/
 	}
 	
-	
-
-//	public Token login(Login login) {
-//
-//		Student student = studentRepository.findByEmail(login.getEmail());
-//		if (student == null) {
-//			throw new RuntimeException("User does not exist.");
-//		}
-//		if (!student.getPassword().equals(login.getPassword())) {
-//			throw new RuntimeException("Password mismatch.");
-//		}
-//		return createJWT("cbwa", student.getEmail(), "gabriel");
-//	}
-
-
-	// creation of token
-
-//	private Token createJWT(String id, String subject, String issuer) {
-//		long nowMillis = System.currentTimeMillis();
-//		Date now = new Date(nowMillis);
-//		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-//		byte[] apiKeySecretBytes = SECRET_KEY.getBytes();
-//		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-//		// Let's set the JWT Claims
-//		JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject).setIssuer(issuer)
-//				.signWith(signatureAlgorithm, signingKey);
-//		// https://github.com/oktadev/okta-java-jwt-example/blob/master/src/main/java/com/okta/createverifytokens/JWTDemo.java
-//		// Here shows how to add expiration.
-//		return new Token(builder.compact());
-//	}
-//
-//	private Claims verifyToken(String token) {
-//		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody();
-//		return claims;
-//	}
-
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
@@ -133,75 +95,10 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findById(id).orElseThrow(
 				() -> new ResourceNotFoundException(String.format("The Student of id %d was not found", id)));
 	}
-//
-//	@Override
-//	public Role saveRole(Role role) {
-//		
-//		return roleRepository.save(role);
-//	}
 
 
 	public User saveOrUpdate(User user) {
 		return userRepository.saveAndFlush(user);
 	}
-
-//	@Override
-//	@Transactional
-//	public void addRoleToUser(String username, String roleName) {
-//		User user = userRepository.findByUsername(username);
-//		Role role = roleRepository.findByName(roleName);
-//		user.getRoles().add(role);
-//		
-//	}
-
-//	@Override
-//	public User getStudent(String username) {
-//		return userRepository.findByUsername(username);
-//	}
-//
-//	@Override
-//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public void addRoleToUser(String username, String roleName) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
-//	@Override
-//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		User user = userRepository.findByUsername(username);
-//		if(user == null) {
-//			throw new UsernameNotFoundException("user not found in the database");
-//		}else {
-//			
-//		}
-//		
-//		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//		user.getRoles().forEach(role -> {
-//			authorities.add(new SimpleGrantedAuthority(role.getName()));
-//		});
-//		
-//		
-//		
-//		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
-//	}
-//	
-//	Collection<GrantedAuthority> authorities = new ArrayList<>();
-//
-//	public Collection<GrantedAuthority> getAuthorities() {
-//		return authorities;
-//	}
-//
-//	public void setAuthorities(Collection<GrantedAuthority> authorities) {
-//		this.authorities = authorities;
-//	}
-	
-
-	
-
 
 }

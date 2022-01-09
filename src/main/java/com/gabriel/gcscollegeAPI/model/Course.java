@@ -17,11 +17,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Course {
 	
-	//what is serializable 
-	//public class Country implements Serializable {
-    //private static final long serialVersionUID = 1L;
-	//search later !1
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

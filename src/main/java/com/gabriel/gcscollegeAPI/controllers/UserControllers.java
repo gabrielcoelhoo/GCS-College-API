@@ -40,7 +40,7 @@ import com.gabriel.gcscollegeAPI.utils.ConstantUtils;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/students")
 public class UserControllers {
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -52,99 +52,54 @@ public class UserControllers {
 
 	@Autowired
 	private UserServiceImpl studentService;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
-	
+
 	@GetMapping("/{studentID}")
 	public User findByID(@PathVariable Long studentID) {
-		
+
 		return studentService.findByIDOrThrowsException(studentID);
-		
-//		if(studentService.findByID(studentID)) {
-//			return new ResponseEntity<>(, HttpStatus.OK);
-//		}else {
-//			return new ResponseEntity<>("User with ID = {studentID} not found", HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
 	}
-	
+
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getStudents() {
 		return ResponseEntity.ok().body(studentService.findAll());
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<User>saveStudent(@RequestBody User user) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/students/create").toUriString());
+	public ResponseEntity<User> saveStudent(@RequestBody User user) {
+		URI uri = URI.create(
+				ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/students/create").toUriString());
 		return ResponseEntity.created(uri).body(studentService.saveStudent(user));
 
 	}
-	
-//	@PostMapping("/roleSave")
-//	public ResponseEntity<Role>saveRole(@RequestBody Role role) {
-//		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/students/roleSave").toUriString());
-//		return ResponseEntity.created(uri).body(studentService.saveRole(role));
-//
-//	}
-//	
-//	@PostMapping("/role/addtouser")
-//	public ResponseEntity<?>addRoletoUser(@RequestBody RoleToUserForm form) {
-//		studentService.addRoleToUser(form.getUsername(), form.getRoleName());
-//		return ResponseEntity.ok().build();
-//
-//	}
-	
-	public class RoleToUserForm {
-		private String username;
-		private String roleName;
-		
-		public String getUsername() {
-			return username;
-		}
-		public void setUsername(String username) {
-			this.username = username;
-		}
-		public String getRoleName() {
-			return roleName;
-		}
-		public void setRoleName(String roleName) {
-			this.roleName = roleName;
-		}
-
-	}
-	
-	
-
 
 	@PutMapping("/update/{studentID}")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public User update(@RequestBody @Valid User repStudent, @PathVariable Long studentID) {
 		User studentBD = studentService.findByIDOrThrowsException(studentID);
 
-		return userRepository.findById(studentID)
-			      .map(student -> {
-			    	  student.setAddress(repStudent.getAddress());
-			    	  student.setCountry(repStudent.getCountry());
-			    	  student.setEmail(repStudent.getEmail());
-			    	  student.setName(repStudent.getName());
-			    	  student.setPassword(repStudent.getPassword());
-			    	  student.setPhoneNumber(repStudent.getPhoneNumber());
-			    	  student.setStudentComments(repStudent.getStudentComments());
-			    	  student.setSurname(repStudent.getSurname());
-			        return userRepository.save(student);
-			      })
-			      .orElseGet(() -> {
-			    	  repStudent.setId(studentID);
-			        return userRepository.save(repStudent);
-			      });	
-		
-		//method taken from 
-		//https://spring.io/guides/tutorials/rest/
+		return userRepository.findById(studentID).map(student -> {
+			student.setAddress(repStudent.getAddress());
+			student.setCountry(repStudent.getCountry());
+			student.setEmail(repStudent.getEmail());
+			student.setName(repStudent.getName());
+			student.setPassword(repStudent.getPassword());
+			student.setPhoneNumber(repStudent.getPhoneNumber());
+			student.setStudentComments(repStudent.getStudentComments());
+			student.setSurname(repStudent.getSurname());
+			return userRepository.save(student);
+		}).orElseGet(() -> {
+			repStudent.setId(studentID);
+			return userRepository.save(repStudent);
+		});
+
+		// method taken from
+		// https://spring.io/guides/tutorials/rest/
 
 	}
 
-	
 	@DeleteMapping("/delete/{idCourse}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public String deleteProduct(@PathVariable Long idCourse) {
@@ -152,10 +107,10 @@ public class UserControllers {
 		return "this course has been deleted successfully";
 
 	}
-	
+
 	@PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> register(@RequestBody User user) {
-		
+
 		JSONObject jsonObject = new JSONObject();
 		try {
 			user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
@@ -172,7 +127,7 @@ public class UserControllers {
 			return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
+
 	@PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> authenticate(@RequestBody User user) {
 
@@ -197,6 +152,5 @@ public class UserControllers {
 		}
 		return null;
 	}
-
 
 }

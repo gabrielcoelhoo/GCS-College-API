@@ -34,17 +34,16 @@ public class EnrolmentController {
 
 	@Autowired
 	private EnrolmentServiceImpl enrolmentService;
-	
+
 	@Autowired
 	private CourseServiceImpl courseService;
-	
+
 	@Autowired
 	private UserServiceImpl studentService;
-	
+
 	private EmployeeServiceImpl employeeService;
 
 	private int sizeOfList;
-
 
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
@@ -55,12 +54,10 @@ public class EnrolmentController {
 		enrolment.setCourse(courseFound);
 		enrolment.setStudent(found);
 		enrolment = enrolmentService.save(enrolment);
-		 
+
 		return "this enrolment has been created successfully";
 
 	}
-		
-
 
 	@GetMapping("/all")
 	public List<Enrolment> findAllEnrolment() {
@@ -75,23 +72,21 @@ public class EnrolmentController {
 	@PutMapping("/{idEnrolment}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void updateEnrolment(@RequestBody Long idCourse, @PathVariable Long idEnrolment) {
-		 enrolmentService.updateEnrolment(idEnrolment, idCourse);
+		enrolmentService.updateEnrolment(idEnrolment, idCourse);
 	}
-	
+
 	@PutMapping("/{idEnrolment}/administration")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void changeStatusEnrolment(@RequestBody String status, @PathVariable Long idEnrolment) {
-		 enrolmentService.updateStatus(idEnrolment, status);
+		enrolmentService.updateStatus(idEnrolment, status);
 	}
-
 
 	@DeleteMapping("/{idEnrolment}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public String deleteEnrolment(@PathVariable Long idEnrolment) {
 		enrolmentService.deleteCourse(idEnrolment);
-		
-		 return "this enrolment has been deleted successfully";
 
+		return "this enrolment has been deleted successfully";
 
 	}
 
