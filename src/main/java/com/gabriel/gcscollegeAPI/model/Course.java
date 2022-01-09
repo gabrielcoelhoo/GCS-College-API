@@ -1,5 +1,6 @@
 package com.gabriel.gcscollegeAPI.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -37,6 +38,17 @@ public class Course {
 	@NotNull
 	private String level;
 	
+	private BigDecimal price;
+	
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+
 	@NotNull
 	private int vacancies;
 	

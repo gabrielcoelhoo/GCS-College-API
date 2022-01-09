@@ -1,11 +1,10 @@
 package com.gabriel.gcscollegeAPI.controllers;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +17,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gabriel.gcscollegeAPI.model.Course;
-import com.gabriel.gcscollegeAPI.model.Employee;
 import com.gabriel.gcscollegeAPI.model.Enrolment;
-import com.gabriel.gcscollegeAPI.model.Status;
+import com.gabriel.gcscollegeAPI.model.EnrolmentInput;
+import com.gabriel.gcscollegeAPI.model.Extra;
 import com.gabriel.gcscollegeAPI.model.User;
 import com.gabriel.gcscollegeAPI.services.CourseServiceImpl;
 import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
 import com.gabriel.gcscollegeAPI.services.EnrolmentServiceImpl;
+import com.gabriel.gcscollegeAPI.services.ExtraService;
 import com.gabriel.gcscollegeAPI.services.UserServiceImpl;
 
 @RestController
@@ -41,21 +41,26 @@ public class EnrolmentController {
 	@Autowired
 	private UserServiceImpl studentService;
 
-	private EmployeeServiceImpl employeeService;
+	@Autowired
+	private ExtraService extraService;
 
-	private int sizeOfList;
 
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public String booking(@RequestBody Enrolment enrolment) {
+	public Enrolment booking(@RequestBody EnrolmentInput input) {
 
-		User found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
-		Course courseFound = courseService.findOrThrowsException(enrolment.getCourse().getId());
+		User found = studentService.loginEmailCheck(input.getEmail());
+		Course courseFound = courseService.findOrThrowsException(input.getCourseID());
+		
+		List<Extra> extrasServices = input.getExtrasServices().stream().map(i -> extraService.findOrThrowsException(i)).collect(Collectors.toList());
+		
+		Enrolment enrolment = new Enrolment();
 		enrolment.setCourse(courseFound);
-		enrolment.setStudent(found);
+		enrolment.setUser(found);
+		enrolment.setExtrasServices(extrasServices);
 		enrolment = enrolmentService.save(enrolment);
 
-		return "this enrolment has been created successfully";
+		return enrolment;
 
 	}
 
@@ -75,9 +80,9 @@ public class EnrolmentController {
 		enrolmentService.updateEnrolment(idEnrolment, idCourse);
 	}
 
-	@PutMapping("/{idEnrolment}/administration")
+	@PutMapping("/{idEnrolment}/{status}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void changeStatusEnrolment(@RequestBody String status, @PathVariable Long idEnrolment) {
+	public void changeStatusEnrolment(@PathVariable Long idEnrolment, @PathVariable String status) {
 		enrolmentService.updateStatus(idEnrolment, status);
 	}
 

@@ -1,7 +1,10 @@
 package com.gabriel.gcscollegeAPI.services;
 
 
+import java.math.BigDecimal;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
 import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Employee;
 import com.gabriel.gcscollegeAPI.model.Enrolment;
+import com.gabriel.gcscollegeAPI.model.Extra;
 import com.gabriel.gcscollegeAPI.model.Status;
 import com.gabriel.gcscollegeAPI.repositories.EnrolmentRepository;
 
@@ -25,6 +29,7 @@ public class EnrolmentServiceImpl {
 	@Autowired
 	private CourseServiceImpl courseService;
 	
+	@Autowired
 	private EmployeeServiceImpl employeeService;
 	
 	public List<Enrolment> findAll() {
@@ -48,11 +53,18 @@ public class EnrolmentServiceImpl {
 		
 		
 		enrolment.setEmployee(employee);
+		enrolment.setTotal(calc(enrolment.getExtrasServices(), enrolment.getCourse().getPrice()));
 		
 		
 		return enrolmentRepository.save(enrolment);
 	}
 	
+	private BigDecimal calc(List<Extra> extras, BigDecimal coursePrice) {
+		
+		Double total = extras.stream().collect(Collectors.summingDouble(i -> i.getPrice().doubleValue()));
+		
+		return coursePrice.add(new BigDecimal(total));
+	}
 	
 	public List<Enrolment> getCourses() {
 		return enrolmentRepository.findAll();
