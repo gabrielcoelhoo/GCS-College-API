@@ -1,48 +1,35 @@
 package com.gabriel.gcscollegeAPI.services;
-
-import java.security.Key;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
-import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gabriel.gcscollegeAPI.exception.InvalidEmailException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
-import com.gabriel.gcscollegeAPI.model.Course;
-import com.gabriel.gcscollegeAPI.model.Login;
 import com.gabriel.gcscollegeAPI.model.Role;
-import com.gabriel.gcscollegeAPI.model.Student;
-import com.gabriel.gcscollegeAPI.model.Token;
+import com.gabriel.gcscollegeAPI.model.User;
 import com.gabriel.gcscollegeAPI.repositories.RoleRepository;
-import com.gabriel.gcscollegeAPI.repositories.StudentRepository;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.gabriel.gcscollegeAPI.repositories.UserRepository;
 
 
 @Service
-public class StudentServiceImpl {
+public class UserServiceImpl implements UserService{
 
 	@Autowired
-	private StudentRepository studentRepository;
+	private UserRepository userRepository;
 	
-	 @Autowired
-	 private PasswordEncoder passwordEncoder;
-	 
-	 @Autowired
-	 private RoleRepository roleRepository;
-
+	@Autowired
+	private RoleRepository roleRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+ 
 //	private String SECRET_KEY = "secret";	
 	
 
@@ -50,21 +37,18 @@ public class StudentServiceImpl {
 //		return studentRepository.findById(id) != null;
 ////				() -> new ResourceNotFoundException(String.format("The Student of id %d was not found", id)));
 //	}
-	 
-	 public Optional<Student> findUserByEmail(String email){
-		return studentRepository.findUserByEmail(email);
-		 
-	 }
 
 	@Transactional
-	public Student saveStudent(Student student) {
-
-		Optional<Optional<Student>> found = Optional.ofNullable(studentRepository.findUserByEmail(student.getEmail()));
+	public User saveStudent(User user) {
 		
-		if (found.isPresent() && !found.get().equals(student)) {
-			throw new InvalidEmailException(String.format("The email %s is already registered", student.getEmail()));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+		Optional<User> found = Optional.ofNullable(userRepository.findByEmail(user.getEmail()));
+		
+		if (found.isPresent() && !found.get().equals(user)) {
+			throw new InvalidEmailException(String.format("The email %s is already registered", user.getEmail()));
 		}
-		return studentRepository.save(student);
+		return userRepository.save(user);
 	}
 	
 //	public void verifyEmail(String email) {
@@ -77,14 +61,14 @@ public class StudentServiceImpl {
 	@Transactional
 	public void deleteStudent(Long id) {
 		findByIDOrThrowsException(id);
-		studentRepository.deleteById(id);
+		userRepository.deleteById(id);
 	}
 
 
 	@Transactional
-	public Student updateStudent(Student repStudent, Long studentID) {
+	public User updateStudent(User repStudent, Long studentID) {
 		
-		return studentRepository.findById(studentID)
+		return userRepository.findById(studentID)
 			      .map(student -> {
 			    	  student.setAddress(repStudent.getAddress());
 			    	  student.setCountry(repStudent.getCountry());
@@ -94,11 +78,11 @@ public class StudentServiceImpl {
 			    	  student.setPhoneNumber(repStudent.getPhoneNumber());
 			    	  student.setStudentComments(repStudent.getStudentComments());
 			    	  student.setSurname(repStudent.getSurname());
-			        return studentRepository.save(student);
+			        return userRepository.save(student);
 			      })
 			      .orElseGet(() -> {
 			    	  repStudent.setId(studentID);
-			        return studentRepository.save(repStudent);
+			        return userRepository.save(repStudent);
 			      });	
 		
 		//method taken from 
@@ -118,10 +102,10 @@ public class StudentServiceImpl {
 //		}
 //		return createJWT("cbwa", student.getEmail(), "gabriel");
 //	}
-//
-//
-//	// creation of token
-//
+
+
+	// creation of token
+
 //	private Token createJWT(String id, String subject, String issuer) {
 //		long nowMillis = System.currentTimeMillis();
 //		Date now = new Date(nowMillis);
@@ -141,59 +125,83 @@ public class StudentServiceImpl {
 //		return claims;
 //	}
 
-	public List<Student> findAll() {
-		return studentRepository.findAll();
+	public List<User> findAll() {
+		return userRepository.findAll();
 	}
 
-	public Student findByIDOrThrowsException(Long id) {
-		return studentRepository.findById(id).orElseThrow(
+	public User findByIDOrThrowsException(Long id) {
+		return userRepository.findById(id).orElseThrow(
 				() -> new ResourceNotFoundException(String.format("The Student of id %d was not found", id)));
 	}
+//
+//	@Override
+//	public Role saveRole(Role role) {
+//		
+//		return roleRepository.save(role);
+//	}
 
-	
-	///////////////////////////////////////////////////////////////
 
-	    public void initRoleAndUser() {
-
-	        Role adminRole = new Role();
-	        adminRole.setRoleName("Admin");
-	        adminRole.setRoleDescription("Admin role");
-	        roleRepository.save(adminRole);
-
-	        Role userRole = new Role();
-	        userRole.setRoleName("User");
-	        userRole.setRoleDescription("Default role for newly created record");
-	        roleRepository.save(userRole);
-
-	        Student adminUser = new Student();
-	        adminUser.setAddress("4 henry st");
-	        adminUser.setCountry("ireland");
-	        adminUser.setEmail("admin@admin.com");
-	        adminUser.setName("admin");
-	        adminUser.setPassword(getEncodedPassword("admin"));
-	        adminUser.setPhoneNumber("1234567890");
-	        adminUser.setStudentComments("admin register");
-	        adminUser.setSurname("boss");
-	        adminUser.setUsername("admin@admin.com");
-	        Set<Role> adminRoles = new HashSet<>();
-	        adminRoles.add(adminRole);
-	        adminUser.setRole(adminRoles);
-	        studentRepository.save(adminUser);
-
-	    }
-
-	    public Student registerNewStudent(Student student) {
-	        Role role = roleRepository.findById("Student").get();
-	        Set<Role> userRoles = new HashSet<>();
-	        userRoles.add(role);
-	        student.setRole(userRoles);
-	        student.setPassword(getEncodedPassword(student.getPassword()));
-
-	        return studentRepository.save(student);
-	    }
-
-	    public String getEncodedPassword(String password) {
-	        return passwordEncoder.encode(password);
-	    }
+	public User saveOrUpdate(User user) {
+		return userRepository.saveAndFlush(user);
 	}
+
+//	@Override
+//	@Transactional
+//	public void addRoleToUser(String username, String roleName) {
+//		User user = userRepository.findByUsername(username);
+//		Role role = roleRepository.findByName(roleName);
+//		user.getRoles().add(role);
+//		
+//	}
+
+//	@Override
+//	public User getStudent(String username) {
+//		return userRepository.findByUsername(username);
+//	}
+//
+//	@Override
+//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public void addRoleToUser(String username, String roleName) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
+//	@Override
+//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//		User user = userRepository.findByUsername(username);
+//		if(user == null) {
+//			throw new UsernameNotFoundException("user not found in the database");
+//		}else {
+//			
+//		}
+//		
+//		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//		user.getRoles().forEach(role -> {
+//			authorities.add(new SimpleGrantedAuthority(role.getName()));
+//		});
+//		
+//		
+//		
+//		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+//	}
+//	
+//	Collection<GrantedAuthority> authorities = new ArrayList<>();
+//
+//	public Collection<GrantedAuthority> getAuthorities() {
+//		return authorities;
+//	}
+//
+//	public void setAuthorities(Collection<GrantedAuthority> authorities) {
+//		this.authorities = authorities;
+//	}
 	
+
+	
+
+
+}

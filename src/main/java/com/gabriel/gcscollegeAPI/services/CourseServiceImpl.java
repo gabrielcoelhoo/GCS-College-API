@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gabriel.gcscollegeAPI.exception.BusinesException;
 import com.gabriel.gcscollegeAPI.exception.ResourceNotFoundException;
 import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.repositories.CourseRepository;

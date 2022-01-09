@@ -21,11 +21,11 @@ import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Employee;
 import com.gabriel.gcscollegeAPI.model.Enrolment;
 import com.gabriel.gcscollegeAPI.model.Status;
-import com.gabriel.gcscollegeAPI.model.Student;
+import com.gabriel.gcscollegeAPI.model.User;
 import com.gabriel.gcscollegeAPI.services.CourseServiceImpl;
 import com.gabriel.gcscollegeAPI.services.EmployeeServiceImpl;
 import com.gabriel.gcscollegeAPI.services.EnrolmentServiceImpl;
-import com.gabriel.gcscollegeAPI.services.StudentServiceImpl;
+import com.gabriel.gcscollegeAPI.services.UserServiceImpl;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -39,7 +39,7 @@ public class EnrolmentController {
 	private CourseServiceImpl courseService;
 	
 	@Autowired
-	private StudentServiceImpl studentService;
+	private UserServiceImpl studentService;
 	
 	private EmployeeServiceImpl employeeService;
 
@@ -50,7 +50,7 @@ public class EnrolmentController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String booking(@RequestBody Enrolment enrolment) {
 
-		Student found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
+		User found = studentService.findByIDOrThrowsException(enrolment.getStudent().getId());
 		Course courseFound = courseService.findOrThrowsException(enrolment.getCourse().getId());
 		enrolment.setCourse(courseFound);
 		enrolment.setStudent(found);

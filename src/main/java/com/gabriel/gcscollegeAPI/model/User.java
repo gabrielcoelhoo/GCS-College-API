@@ -1,24 +1,19 @@
 package com.gabriel.gcscollegeAPI.model;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name = "student")
-public class Student {
+@Table(name = "user")
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -56,34 +51,9 @@ public class Student {
 	@NotEmpty(message = "addres cannot be null")
 	private String address;
 	
-	 @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	    @JoinTable(name = "STUDENT_ROLE",
-	            joinColumns = {
-	                    @JoinColumn(name = "STUDENT_ID")
-	            },
-	            inverseJoinColumns = {
-	                    @JoinColumn(name = "ROLE_ID")
-	            }
-	    )
-	
-	public String getUsername() {
-		return email;
-	}
-
-	public void setUsername(String email) {
-		this.email = email;
-	}
-
-	private Set<Role> role;
-	
-	
-	public Set<Role> getRole() {
-		return role;
-	}
-
-	public void setRole(Set<Role> role) {
-		this.role = role;
-	}
+	@ManyToOne
+	@JoinColumn(name = "role_id")
+	private Role role;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -173,7 +143,7 @@ public class Student {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Student other = (Student) obj;
+		User other = (User) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -181,6 +151,13 @@ public class Student {
 			return false;
 		return true;
 	}
-	
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 
 }

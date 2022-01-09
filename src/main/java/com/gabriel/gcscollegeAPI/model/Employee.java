@@ -34,7 +34,6 @@ public class Employee implements Serializable {
 		this.id = id;
 	}
 
-
 	public Long getId() {
 		return id;
 	}

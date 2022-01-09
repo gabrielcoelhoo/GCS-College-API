@@ -19,7 +19,7 @@ public class Enrolment {
 	private Course course;
 	
 	@OneToOne
-	private Student student;
+	private User user;
 	
 	@OneToOne
 	private Employee employee;
@@ -50,12 +50,12 @@ public class Enrolment {
 	}
 
 
-	public Student getStudent() {
-		return student;
+	public User getStudent() {
+		return user;
 	}
 
-	public void setStudent(Student student) {
-		this.student = student;
+	public void setStudent(User user) {
+		this.user = user;
 	}
 
 	public Status getStatus() {
@@ -75,4 +75,3 @@ public class Enrolment {
 	
 
 }
-
