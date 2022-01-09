@@ -33,9 +33,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
+		http
+        .formLogin()
+        .loginPage("/login")
+        .usernameParameter("email")
+        .permitAll()
+    .and()
+        .logout()
+        .permitAll();
+		
 		http.cors();
 		http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().antMatchers("/user/*").permitAll().anyRequest().authenticated();
+				.authorizeRequests()
+				.antMatchers("/api/students/*").permitAll().anyRequest().authenticated();
 		http.apply(new JwtTokenConfigurer(tokenProvider));
 	}
 
