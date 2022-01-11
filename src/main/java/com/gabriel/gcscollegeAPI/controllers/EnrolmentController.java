@@ -45,9 +45,11 @@ public class EnrolmentController {
 	private ExtraService extraService;
 
 
-	@PostMapping
+	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Enrolment booking(@RequestBody EnrolmentInput input) {
+		
+		System.out.println(input);
 
 		User found = studentService.loginEmailCheck(input.getEmail());
 		Course courseFound = courseService.findOrThrowsException(input.getCourseID());

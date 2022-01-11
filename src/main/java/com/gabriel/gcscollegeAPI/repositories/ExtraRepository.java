@@ -7,7 +7,7 @@ import com.gabriel.gcscollegeAPI.model.Extra;
 
 
 @Repository
-public interface ExtraReporsitory extends JpaRepository<Extra, Long>{
+public interface ExtraRepository extends JpaRepository<Extra, Long>{
 
 	
 }
