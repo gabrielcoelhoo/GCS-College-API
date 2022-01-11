@@ -41,9 +41,6 @@ public class EnrolmentController {
 	@Autowired
 	private UserServiceImpl studentService;
 
-	@Autowired
-	private ExtraService extraService;
-
 
 	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
@@ -54,12 +51,9 @@ public class EnrolmentController {
 		User found = studentService.loginEmailCheck(input.getEmail());
 		Course courseFound = courseService.findOrThrowsException(input.getCourseID());
 		
-		List<Extra> extrasServices = input.getExtrasServices().stream().map(i -> extraService.findOrThrowsException(i)).collect(Collectors.toList());
-		
 		Enrolment enrolment = new Enrolment();
 		enrolment.setCourse(courseFound);
 		enrolment.setUser(found);
-		enrolment.setExtrasServices(extrasServices);
 		enrolment = enrolmentService.save(enrolment);
 
 		return enrolment;

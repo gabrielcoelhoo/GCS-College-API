@@ -10,9 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -36,16 +34,17 @@ public class Enrolment {
 	@Enumerated(EnumType.STRING)
 	private Status status = Status.SENT;
 	
-	@ManyToMany
-	@JoinTable(name = "enrolment_extra", joinColumns = @JoinColumn(name="enrolment_id"),
-	inverseJoinColumns =  @JoinColumn(name="extra_id"))
-	private List<Extra> extrasServices = new ArrayList<>();
-	
 	private BigDecimal total;
 	
-
+	@OneToMany
+	private List<ExtraEnrolment> extras = new ArrayList<>();
+	
 	public void changeStatus(Status status) {
 		this.status = status;
+	}
+	
+	public void sumWithExtras(BigDecimal totalExtras) {
+		this.total = this.total.add(totalExtras);
 	}
 	public Long getId() {
 		return id;
@@ -83,17 +82,19 @@ public class Enrolment {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public List<Extra> getExtrasServices() {
-		return extrasServices;
-	}
-	public void setExtrasServices(List<Extra> extrasServices) {
-		this.extrasServices = extrasServices;
-	}
 	public BigDecimal getTotal() {
 		return total;
 	}
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
+	public List<ExtraEnrolment> getExtras() {
+		return extras;
+	}
+	public void setExtras(List<ExtraEnrolment> extras) {
+		this.extras = extras;
+	}
+	
+	
 	
 }

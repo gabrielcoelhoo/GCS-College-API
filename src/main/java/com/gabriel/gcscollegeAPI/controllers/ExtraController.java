@@ -28,7 +28,7 @@ import com.gabriel.gcscollegeAPI.services.UserServiceImpl;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("api/users")
+@RequestMapping("api/extras")
 public class ExtraController {
 
 	@Autowired
@@ -40,7 +40,6 @@ public class ExtraController {
 	
 	@GetMapping("/{extraId}")
 	public Extra findByID(@PathVariable Long extraId) {
-		
 		return extraService.findByIDOrThrowsException(extraId);
 
 	}

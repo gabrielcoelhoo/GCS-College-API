@@ -53,7 +53,7 @@ public class EnrolmentServiceImpl {
 		
 		
 		enrolment.setEmployee(employee);
-		enrolment.setTotal(calc(enrolment.getExtrasServices(), enrolment.getCourse().getPrice()));
+		//enrolment.setTotal(calc(enrolment.getExtrasServices(), enrolment.getCourse().getPrice()));
 		
 		
 		return enrolmentRepository.save(enrolment);
