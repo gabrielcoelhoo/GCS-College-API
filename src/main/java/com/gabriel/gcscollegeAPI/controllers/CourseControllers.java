@@ -41,9 +41,9 @@ public class CourseControllers {
 
 	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public String booking(@RequestBody Course course) {
-		courseService.save(course);
-		return "this course has been created successfully";
+	public Course booking(@RequestBody Course course) {
+		return courseService.save(course);
+		
 	}
 
 	@GetMapping("/all")
@@ -74,6 +74,7 @@ public class CourseControllers {
 			course.setLevel(repCourse.getLevel());
 			course.setPeriod(repCourse.getPeriod());
 			course.setVacancies(repCourse.getVacancies());
+			course.setPrice(repCourse.getPrice());
 			return courseRepository.save(course);
 		}).orElseGet(() -> {
 			repCourse.setId(idCourse);

@@ -66,9 +66,10 @@ public class UserControllers {
 
 	}
 
-	@PutMapping("/update/{studentID}")
+	@PutMapping("/update/{userId}")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public User update(@RequestBody @Valid User repUser, @PathVariable Long userId) {
+		
 		User userBD = userServiceImpl.findByIDOrThrowsException(userId);
 
 		return userRepository.findById(userId)
@@ -100,7 +101,7 @@ public class UserControllers {
 //
 //	}
 	
-	@GetMapping("signup")
+	@PostMapping("/userLogin")
 	public Login login(@RequestBody @Valid Login login) {
 		return userServiceImpl.login(login);
 	}
