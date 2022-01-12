@@ -2,11 +2,11 @@ package com.gabriel.gcscollegeAPI.services;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gabriel.gcscollegeAPI.exception.BusinesException;
 import com.gabriel.gcscollegeAPI.model.Enrolment;
 import com.gabriel.gcscollegeAPI.model.Extra;
 import com.gabriel.gcscollegeAPI.model.ExtraEnrolment;
@@ -27,24 +27,20 @@ public class ExtraEnrolmentService {
 
 	@Autowired
 	private EnrolmentRepository enrolmentRepository;
-	public Enrolment save(List<ExtraEnrolment> list) {
-		if (list.isEmpty()) {
-			throw new BusinesException("The list of extras cannot be empty");
-		}
+	
+	
+	public List<ExtraEnrolment> save(List<ExtraEnrolment> list, Enrolment enrolment) {
 
-		Enrolment enrolment = enrolmentService.findOrThrowsException(list.get(0).getEnrolment().getId());
-
-		list.forEach(i -> {
+		List<ExtraEnrolment> listReady = list.stream().map(i -> {
 			Extra extra = extraService.findByIDOrThrowsException(i.getExtra().getId());
 			i.setExtra(extra);
 			i.setEnrolment(enrolment);
-			BigDecimal totalParcial = extra.getPrice().multiply(new BigDecimal(i.getQuantity()));
-			enrolment.sumWithExtras(totalParcial);
-			extraEnrolmentRepository.save(i);
-		});
-		//enrolment.setExtras(list);
-		return enrolmentRepository.save(enrolment);
+			BigDecimal total = extra.getPrice().multiply(new BigDecimal(i.getQuantity()));
+			i.setTotalParcial(total);
 
+			return i;
+		}).collect(Collectors.toList());
+		return extraEnrolmentRepository.saveAll(listReady);
 	}
 
 }

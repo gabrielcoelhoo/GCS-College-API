@@ -1,5 +1,7 @@
 package com.gabriel.gcscollegeAPI.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +25,8 @@ public class ExtraEnrolment {
 	private Extra extra;
 
 	private int quantity;
+	
+	private BigDecimal totalParcial;
 
 	public Long getId() {
 		return id;
@@ -55,6 +59,16 @@ public class ExtraEnrolment {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	
+	
+
+	public BigDecimal getTotalParcial() {
+		return totalParcial;
+	}
+
+	public void setTotalParcial(BigDecimal totalParcial) {
+		this.totalParcial = totalParcial;
 	}
 
 	@Override
