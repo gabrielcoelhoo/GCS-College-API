@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	public void deleteUser(Long id) {
 		findByIDOrThrowsException(id);
-		userRepository.deleteById(id);;
+		userRepository.deleteById(id);
 	}
 
 

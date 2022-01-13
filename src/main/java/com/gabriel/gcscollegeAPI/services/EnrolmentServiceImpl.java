@@ -2,7 +2,7 @@ package com.gabriel.gcscollegeAPI.services;
 
 
 import java.math.BigDecimal;
-import java.util.DoubleSummaryStatistics;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +16,7 @@ import com.gabriel.gcscollegeAPI.model.Course;
 import com.gabriel.gcscollegeAPI.model.Employee;
 import com.gabriel.gcscollegeAPI.model.Enrolment;
 import com.gabriel.gcscollegeAPI.model.Extra;
+import com.gabriel.gcscollegeAPI.model.ExtraEnrolment;
 import com.gabriel.gcscollegeAPI.model.Status;
 import com.gabriel.gcscollegeAPI.repositories.EnrolmentRepository;
 
@@ -31,6 +32,10 @@ public class EnrolmentServiceImpl {
 	
 	@Autowired
 	private EmployeeServiceImpl employeeService;
+	
+	
+	@Autowired
+	private ExtraService extraService;
 	
 	public List<Enrolment> findAll() {
 		return enrolmentRepository.findAll();
@@ -53,17 +58,39 @@ public class EnrolmentServiceImpl {
 		
 		
 		enrolment.setEmployee(employee);
-		enrolment.setTotal(calc(enrolment.getExtrasServices(), enrolment.getCourse().getPrice()));
+		
+		enrolment.setTotal(enrolment.getCourse().getPrice());
+		List<ExtraEnrolment> listReady = new ArrayList<>();
+		
+		if (!enrolment.getExtras().isEmpty()) {
+			listReady = validExtrasEnrolment(enrolment);
+		}
+		
+		enrolment.setExtras(listReady);
+		
+		
+		if(!enrolment.getExtras().isEmpty()) {
+			Double  totalExtras = enrolment.getExtras().stream().collect(Collectors.summingDouble(e -> e.getTotalParcial().doubleValue()));
+			enrolment.sumWithExtras(new BigDecimal(totalExtras));
+		}
 		
 		
 		return enrolmentRepository.save(enrolment);
 	}
 	
-	private BigDecimal calc(List<Extra> extras, BigDecimal coursePrice) {
-		
-		Double total = extras.stream().collect(Collectors.summingDouble(i -> i.getPrice().doubleValue()));
-		
-		return coursePrice.add(new BigDecimal(total));
+	
+	private List<ExtraEnrolment> validExtrasEnrolment(Enrolment e){
+		 List<ExtraEnrolment> list = e.getExtras();
+		 
+		 list.forEach(item ->{
+			 Extra extra = extraService.findByIDOrThrowsException(item.getId());
+			 item.setExtra(extra);
+			 BigDecimal total = extra.getPrice().multiply(new BigDecimal(item.getQuantity()));
+			 item.setTotalParcial(total);
+
+		 });
+		 
+		 return list;
 	}
 	
 	public List<Enrolment> getCourses() {
@@ -128,6 +155,11 @@ public class EnrolmentServiceImpl {
 		
 		return save(enrolment);
 		
+	}
+	
+	@Transactional
+	public Enrolment update(Enrolment e) {
+		return enrolmentRepository.save(e);
 	}
 	public Enrolment findOrThrowsException(Long id) {
 		return enrolmentRepository.findById(id).orElseThrow(

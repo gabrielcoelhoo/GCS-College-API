@@ -10,15 +10,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Extra {
+public class ExtraEnrolment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Enrolment enrolment;
+	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Extra extra;
 
-	private String name;
-
-	private BigDecimal price;
+	private int quantity;
+	
+	private BigDecimal totalParcial;
 
 	public Long getId() {
 		return id;
@@ -28,22 +36,40 @@ public class Extra {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+
+	public Enrolment getEnrolment() {
+		return enrolment;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setEnrolment(Enrolment enrolment) {
+		this.enrolment = enrolment;
 	}
 
-	public BigDecimal getPrice() {
-		return price;
+	public Extra getExtra() {
+		return extra;
 	}
 
-	public void setPrice(BigDecimal price) {
-		this.price = price;
+	public void setExtra(Extra extra) {
+		this.extra = extra;
 	}
 
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
+	
+
+	public BigDecimal getTotalParcial() {
+		return totalParcial;
+	}
+
+	public void setTotalParcial(BigDecimal totalParcial) {
+		this.totalParcial = totalParcial;
+	}
 
 	@Override
 	public int hashCode() {
@@ -61,7 +87,7 @@ public class Extra {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Extra other = (Extra) obj;
+		ExtraEnrolment other = (ExtraEnrolment) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

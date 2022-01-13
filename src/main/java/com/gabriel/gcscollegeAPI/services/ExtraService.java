@@ -51,4 +51,9 @@ public class ExtraService {
 		return extraRepository.save(extra);
 	}
 
+
+	public Extra save(Extra extra) {
+		return extraRepository.save(extra);		
+	}
+
 }

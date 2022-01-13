@@ -1,6 +1,8 @@
 package com.gabriel.gcscollegeAPI.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -17,18 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabriel.gcscollegeAPI.model.EnrolmentInput;
 import com.gabriel.gcscollegeAPI.model.Extra;
-import com.gabriel.gcscollegeAPI.model.Login;
-import com.gabriel.gcscollegeAPI.model.Token;
-import com.gabriel.gcscollegeAPI.model.User;
 import com.gabriel.gcscollegeAPI.repositories.ExtraRepository;
-import com.gabriel.gcscollegeAPI.repositories.UserRepository;
 import com.gabriel.gcscollegeAPI.services.ExtraService;
-import com.gabriel.gcscollegeAPI.services.UserServiceImpl;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("api/users")
+@RequestMapping("api/extras")
 public class ExtraController {
 
 	@Autowired
@@ -46,14 +44,14 @@ public class ExtraController {
 	}
 	
 	@GetMapping("/all")
-	public List<Extra> findAllCourses() {
+	public List<Extra> findAllExtras() {
 		return extraService.findAll();
 	}
 
 	@PostMapping("/create")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Extra submission(@RequestBody Extra extra) {
-		
+			
 //		 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //		    String encodedPassword = passwordEncoder.encode(user.getPassword());
 //		    user.setPassword(encodedPassword);
@@ -61,6 +59,7 @@ public class ExtraController {
 		return extraService.saveExtra(extra);
 
 	}
+	
 
 	@PutMapping("/update/{extraId}")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
@@ -86,9 +85,9 @@ public class ExtraController {
 	
 	@DeleteMapping("/delete/{extraId}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public String deleteProduct(@PathVariable Long extraId) {
+	public String deleteExtra(@PathVariable Long extraId) {
 		extraService.deleteExtra(extraId);
-	return "this courses has been delted successfuly";
+	return "this extra has been delted successfuly";
 		
 
 	}
