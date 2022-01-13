@@ -98,8 +98,8 @@ public class UserControllers {
 	@DeleteMapping("/delete/{idCourse}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public String deleteProduct(@PathVariable Long idCourse) {
-	return userServiceImpl.deleteUser(idCourse);
-	
+	userServiceImpl.deleteUser(idCourse);
+	return "this courses has been delted successfuly";
 		
 
 	}
