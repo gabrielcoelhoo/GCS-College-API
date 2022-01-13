@@ -3,6 +3,10 @@ package com.gabriel.gcscollegeAPI.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+<<<<<<< HEAD
+=======
+import java.util.DoubleSummaryStatistics;
+>>>>>>> 993546fc88a1b5fe520acdb90a2d57303a490c6d
 import java.util.List;
 import java.util.stream.Collectors;
 

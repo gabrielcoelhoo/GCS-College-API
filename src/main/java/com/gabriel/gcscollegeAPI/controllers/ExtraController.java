@@ -38,7 +38,6 @@ public class ExtraController {
 	
 	@GetMapping("/{extraId}")
 	public Extra findByID(@PathVariable Long extraId) {
-		
 		return extraService.findByIDOrThrowsException(extraId);
 
 	}

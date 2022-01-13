@@ -15,7 +15,7 @@ public class EnrolmentInput {
 	private Long courseID;
 	
 	
-	private List<ExtraEnrolment> extras = new ArrayList<>();
+	private List<Long> extrasServices = new ArrayList<>();
 	
 	public String getEmail() {
 		return email;
@@ -29,16 +29,12 @@ public class EnrolmentInput {
 	public void setCourseID(Long courseID) {
 		this.courseID = courseID;
 	}
-<<<<<<< HEAD
+	public List<Long> getExtrasServices() {
+		return extrasServices;
+	}
+	public void setExtrasServices(List<Long> extrasServices) {
+		this.extrasServices = extrasServices;
+	}
 	
-=======
->>>>>>> 993546fc88a1b5fe520acdb90a2d57303a490c6d
-	public List<ExtraEnrolment> getExtras() {
-		return extras;
-	}
-	public void setExtras(List<ExtraEnrolment> extras) {
-		this.extras = extras;
-	}
-
 	
 }
